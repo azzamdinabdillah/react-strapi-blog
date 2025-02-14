@@ -7,7 +7,10 @@ export interface BlogIF {
   date: string;
   image: string;
   author?: string;
-  createdAt?: string
+  createdAt?: string;
+  description?: string;
+  documentId?: string;
+  slug?: string;
 }
 
 export interface CategoryIF {

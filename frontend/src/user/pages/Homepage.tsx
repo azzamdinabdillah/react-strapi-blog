@@ -3,26 +3,18 @@ import CardBlog from "../components/CardBlog";
 import { Hero } from "../components/Hero";
 import { useEffect, useState } from "react";
 import { BlogIF } from "../../interface/BlogIF";
+import { formatDate } from "../../helpers/format-date";
+import { Link } from "react-router";
 
 function Homepage() {
   const [blogs, setBlogs] = useState<BlogIF[]>([]);
+  const env = import.meta.env;
 
   async function fetchBlog() {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/blogs?populate=*`
-    );
+    const response = await axios.get(`${env.VITE_API_URL}/blogs?populate=*`);
     console.log(response.data.data);
 
     setBlogs(response.data.data);
-  }
-
-  function formatDate(dateRaw) {
-    const date = new Date(dateRaw);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
   }
 
   useEffect(() => {
@@ -56,14 +48,15 @@ function Homepage() {
             <div className="gap-7 xl:gap-10 flex flex-col items-center">
               {blogs.map((blog, index) => (
                 <>
-                  <CardBlog
-                    image="/public/images/blog-1.png"
-                    category={{ name: blog.category.name }}
-                    content="Redefined the user acquisition and redesigned the onboarding
-                    experience, all within 3 working weeks."
-                    title={blog.title}
-                    date={formatDate(blog.createdAt)}
-                  />
+                  <Link to={`/blog/${blog.documentId}/${blog.slug}`}>
+                    <CardBlog
+                      image="/public/images/blog-1.png"
+                      category={{ name: blog.category.name }}
+                      content={blog.description}
+                      title={blog.title}
+                      date={formatDate(blog.createdAt ?? "")}
+                    />
+                  </Link>
                   {index !== 4 ? <hr className="hr" /> : ""}
                 </>
               ))}
