@@ -11,7 +11,7 @@ function CardBlog({ category, content, date, image, title }: BlogIF) {
           <p className="date uppercase text-blue text-sm font-normal">{date}</p>
         </div>
         <div className="gap-3 flex flex-col md:gap-3">
-          <h3 className="text-xl md:text-2xl xl:text-[28px] text-blue font-bold leading-7 md:leading-9">
+          <h3 className="text-xl md:text-2xl xl:text-[28px] text-blue font-bold leading-7 md:leading-9 capitalize">
             {title}
           </h3>
           <p className="text-blue font-normal text-sm xl:text-[18px] leading-6 md:text-base md:leading-7 xl:leading-8">
