@@ -1,34 +1,35 @@
-import axios from "axios";
 import CardBlog from "../components/CardBlog";
 import { Hero } from "../components/Hero";
 import { useEffect, useState } from "react";
 import { BlogIF } from "../../interface/BlogIF";
 import { formatDate } from "../../helpers/format-date";
 import { Link } from "react-router";
+import { httpRequest } from "../../helpers/http-request";
 
 function Homepage() {
   const [blogs, setBlogs] = useState<BlogIF[]>([]);
-  const env = import.meta.env;
 
-  async function fetchBlog() {
-    const response = await axios.get(`${env.VITE_API_URL}/blogs?populate=*`);
-    console.log(response.data.data);
-
-    setBlogs(response.data.data);
+  async function fetchData() {
+    const response = await httpRequest({
+      type: "get",
+      url: "/blogs?populate=*",
+    });
+    setBlogs(response);
   }
 
   useEffect(() => {
-    fetchBlog();
+    fetchData();
   }, []);
 
   return (
     <div className="wrapper p-2 md:p-4 lg:p-7">
       <Hero
+        key={"hero"}
         subTitle={
           <>
-            <p className="text-p text-white mb-5">
+            <div className="text-p text-white mb-5">
               <div className="animate-hello inline-block">👋</div> HELLO
-            </p>
+            </div>
           </>
         }
       >
@@ -48,11 +49,17 @@ function Homepage() {
             <div className="gap-7 xl:gap-10 flex flex-col items-center">
               {blogs.map((blog, index) => (
                 <>
-                  <Link to={`/blog/${blog.documentId}/${blog.slug}`}>
+                  <Link
+                    key={blog.documentId}
+                    to={`/blog/${blog.documentId}/${blog.slug}`}
+                  >
                     <CardBlog
-                      image="/public/images/blog-1.png"
+                      key={blog.documentId}
+                      image={{
+                        url: `${import.meta.env.VITE_BE_URL}${blog.image.url}`,
+                      }}
                       category={{ name: blog.category.name }}
-                      content={blog.description}
+                      description={blog.description}
                       title={blog.title}
                       date={formatDate(blog.createdAt ?? "")}
                     />

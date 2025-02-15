@@ -4,7 +4,8 @@
   "info": {
     "singularName": "blog",
     "pluralName": "blogs",
-    "displayName": "Blog"
+    "displayName": "Blog",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -25,15 +26,24 @@
       "target": "api::category.category"
     },
     "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "author": {
       "type": "string",
       "required": true
+    },
+    "description": {
+      "type": "text",
+      "minLength": 10
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }

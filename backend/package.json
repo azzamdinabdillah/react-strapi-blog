@@ -6,7 +6,7 @@
   "scripts": {
     "build": "strapi build",
     "deploy": "strapi deploy",
-    "develop": "strapi develop",
+    "develop": "strapi develop --host=0.0.0.0",
     "start": "strapi start",
     "strapi": "strapi"
   },

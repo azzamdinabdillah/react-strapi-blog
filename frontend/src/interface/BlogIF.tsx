@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 
 export interface BlogIF {
   title: string;
-  content: ReactNode | string;
+  content?: ReactNode | string;
   category: CategoryIF;
   date: string;
-  image: string;
+  image: BlogImage;
   author?: string;
   createdAt?: string;
   description?: string;
@@ -15,4 +15,8 @@ export interface BlogIF {
 
 export interface CategoryIF {
   name: string;
+}
+
+export interface BlogImage {
+  url: string
 }
