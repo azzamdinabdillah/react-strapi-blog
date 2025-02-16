@@ -230,18 +230,18 @@
 
 .rich-text li,
 .rich-text p {
-  color: #232e52;
+  color: black;
   /* font-size: 18px; */
-  font-size: 14px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%;
+  line-height: 160%;
 }
 
 .rich-text h1 {
   color: black;
   /* font-size: 52px; */
-  font-size: 26px;
+  font-size: 25px;
   font-style: normal;
   font-weight: 600;
   line-height: 120%; /* 62.4px */
@@ -261,7 +261,7 @@
 .rich-text h3 {
   color: black;
   /* font-size: 52px; */
-  font-size: 16px;
+  font-size: 17px;
   font-style: normal;
   font-weight: 500;
   line-height: 120%; /* 62.4px */
@@ -273,7 +273,58 @@
   list-style-type: auto;
 }
 
-.rich-text ul{
+.rich-text ul {
   list-style: inside;
   list-style-type: disc;
+}
+
+@media screen and (min-width: 768px) {
+  .rich-text h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+
+  .rich-text h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .rich-text li,
+  .rich-text p {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .rich-text h1 {
+    font-size: 38px;
+    margin-bottom: 25px;
+  }
+
+  .rich-text h3 {
+    font-size: 23px;
+    margin-bottom: 15px;
+  }
+
+  .rich-text li,
+  .rich-text p {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .rich-text h1 {
+    font-size: 45px;
+    margin-bottom: 30px;
+  }
+
+  .rich-text h3 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+
+  .rich-text li,
+  .rich-text p {
+    font-size: 20px;
+  }
 }

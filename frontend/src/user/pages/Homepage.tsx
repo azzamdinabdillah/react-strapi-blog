@@ -5,16 +5,20 @@ import { BlogIF } from "../../interface/BlogIF";
 import { formatDate } from "../../helpers/format-date";
 import { Link } from "react-router";
 import { httpRequest } from "../../helpers/http-request";
+import { SkeletonCardBlog } from "../components/Skeletons";
 
 function Homepage() {
   const [blogs, setBlogs] = useState<BlogIF[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function fetchData() {
+    setLoading(true);
     const response = await httpRequest({
       type: "get",
       url: "/blogs?populate=*",
     });
     setBlogs(response);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -38,7 +42,7 @@ function Homepage() {
 
       <div className="mx-3 md:mx-5">
         <div className="my-10 md:max-w-[850px] lg:max-w-[970px] flex justify-center items-center md:mx-auto md:my-14 lg:my-28">
-          <div className="flex flex-col gap-7 xl:gap-12">
+          <div className="flex flex-col gap-7 xl:gap-12 w-full">
             <div className="header">
               <h2 className="text-h2 text-blue text-2xl mb-5 md:text-[32px]">
                 Design Tools
@@ -47,26 +51,36 @@ function Homepage() {
             </div>
 
             <div className="gap-7 xl:gap-10 flex flex-col items-center">
-              {blogs.map((blog, index) => (
+              {loading ? (
                 <>
-                  <Link
-                    key={blog.documentId}
-                    to={`/blog/${blog.documentId}/${blog.slug}`}
-                  >
-                    <CardBlog
-                      key={blog.documentId}
-                      image={{
-                        url: `${import.meta.env.VITE_BE_URL}${blog.image.url}`,
-                      }}
-                      category={{ name: blog.category.name }}
-                      description={blog.description}
-                      title={blog.title}
-                      date={formatDate(blog.createdAt ?? "")}
-                    />
-                  </Link>
-                  {index !== 4 ? <hr className="hr" /> : ""}
+                  <SkeletonCardBlog />
+                  <SkeletonCardBlog />
+                  <SkeletonCardBlog />
                 </>
-              ))}
+              ) : (
+                blogs.map((blog, index) => (
+                  <>
+                    <Link
+                      key={blog.documentId}
+                      to={`/blog/${blog.documentId}/${blog.slug}`}
+                    >
+                      <CardBlog
+                        key={blog.documentId}
+                        image={{
+                          url: `${import.meta.env.VITE_BE_URL}${
+                            blog.image.url
+                          }`,
+                        }}
+                        category={{ name: blog.category.name }}
+                        description={blog.description}
+                        title={blog.title}
+                        date={formatDate(blog.createdAt ?? "")}
+                      />
+                    </Link>
+                    {index !== 4 ? <hr className="hr" /> : ""}
+                  </>
+                ))
+              )}
             </div>
           </div>
         </div>
