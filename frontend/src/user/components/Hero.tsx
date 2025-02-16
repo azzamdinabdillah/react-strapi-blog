@@ -25,15 +25,13 @@ export function Hero({
       <Navbar />
       <NavbarMobile />
       <div className="flex flex-col lg:flex-row items-start gap-3 lg:gap-8 md:max-w-[800px] md:mx-auto lg:max-w-[930px] py-10 md:py-20 lg:py-36 lg:pt-[200px] xl:pt-[250px]">
-        {isBack ? (
+        {isBack && (
           <img
             src="/icons/back.svg"
             alt=""
             onClick={() => navigate(-1)}
             className="cursor-pointer"
           />
-        ) : (
-          ""
         )}
         <div className="w-full">
           {loading ? (
@@ -49,5 +47,34 @@ export function Hero({
         </div>
       </div>
     </div>
+  );
+}
+
+export function HeroSubTitle({
+  isLeftElement = false,
+  isRightElement = false,
+  leftElement,
+  rightElement,
+}: {
+  isLeftElement?: boolean;
+  isRightElement?: boolean;
+  leftElement?: string | ReactNode;
+  rightElement?: string | ReactNode;
+}) {
+  return (
+    <>
+      <div className="flex border-2 border-white rounded-md text-xs md:text-sm uppercase w-fit mb-3">
+        {isLeftElement && (
+          <div className="py-2 px-3 text-white font-semibold bg-transparent">
+            {leftElement}
+          </div>
+        )}
+        {isRightElement && (
+          <div className="py-2 px-3 bg-white text-blue font-medium">
+            {rightElement}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { Hero } from "../components/Hero";
+import { Hero, HeroSubTitle } from "../components/Hero";
 import { useEffect, useState } from "react";
 import { BlogIF } from "../../interface/BlogIF";
 import { httpRequest } from "../../helpers/http-request";
@@ -28,20 +28,18 @@ export default function SingleBlog() {
 
   return (
     <div>
-      <div className="wrapper p-2 md:p-4 lg:p-7">
+      <div className="wrapper-parent">
         <Hero
           loading={loading}
           customClassName="rounded-b-none"
           isBack={true}
           subTitle={
-            <div className="flex border-2 border-white rounded-md text-xs md:text-sm uppercase w-fit mb-3">
-              <div className="py-2 px-3 text-white font-semibold bg-transparent">
-                {blog?.category.name}
-              </div>
-              <div className="py-2 px-3 bg-white text-blue font-medium">
-                {formatDate(blog?.createdAt ?? "")}
-              </div>
-            </div>
+            <HeroSubTitle
+              isLeftElement={true}
+              isRightElement={true}
+              leftElement={blog?.category.name}
+              rightElement={formatDate(blog?.createdAt ?? "")}
+            />
           }
         >
           <p>{blog?.title}</p>

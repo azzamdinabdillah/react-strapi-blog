@@ -1,13 +1,26 @@
+import { Link } from "react-router";
 import { BlogIF } from "../../interface/BlogIF";
 
-function CardBlog({ category, description, date, image, title }: BlogIF) {
+function CardBlog({
+  category: {
+    name: categoryName,
+    documentId: categoryDocumentId,
+    slug: categorySlug,
+  },
+  description,
+  date,
+  image,
+  title,
+}: BlogIF) {
   return (
     <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:items-center justify-between lg:flex lg:gap-16">
       <div className="gap-3 flex flex-col lg:gap-6 order-2 sm:order-1 md:gap-5 lg:flex-1">
         <div className="top flex gap-3 items-center">
-          <div className="badge-category uppercase bg-blue-100 px-3 py-2 rounded-md text-blue text-sm font-semibold">
-            {category.name}
-          </div>
+          <Link to={`/blog/category/${categoryDocumentId}/${categorySlug}`}>
+            <div className="badge-category uppercase bg-blue-100 px-3 py-2 rounded-md text-blue text-sm font-semibold">
+              {categoryName}
+            </div>
+          </Link>
           <p className="date uppercase text-blue text-sm font-normal">{date}</p>
         </div>
         <div className="gap-3 flex flex-col md:gap-3">
@@ -20,7 +33,11 @@ function CardBlog({ category, description, date, image, title }: BlogIF) {
         </div>
       </div>
       <div className="image sm:order-2 md:max-w-[300px] lg:w-full lg:h-[210px] md:justify-self-center">
-        <img src={image.url} alt="" className="w-full h-full object-cover rounded"/>
+        <img
+          src={image.url}
+          alt=""
+          className="w-full h-full object-cover rounded"
+        />
       </div>
     </div>
   );
