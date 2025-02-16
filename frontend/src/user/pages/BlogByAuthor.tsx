@@ -1,24 +1,25 @@
-import CardBlog from "../components/CardBlog";
-import { Hero } from "../components/Hero";
+import { Link, useParams } from "react-router";
+import { Hero, HeroSubTitle } from "../components/Hero";
+import ListBlog from "../layouts/ListBlog";
 import { Fragment, useEffect, useState } from "react";
 import { BlogIF } from "../../interface/BlogIF";
-import { formatDate } from "../../helpers/format-date";
-import { Link } from "react-router";
 import { httpRequest } from "../../helpers/http-request";
+import CardBlog from "../components/CardBlog";
+import { formatDate } from "../../helpers/format-date";
 import { SkeletonCardBlog } from "../components/Skeletons";
-import ListBlog from "../layouts/ListBlog";
 
-function Homepage() {
-  const [blogs, setBlogs] = useState<BlogIF[]>([]);
+export default function BlogByAuthor() {
+  const param = useParams();
+  const [blogs, setBlog] = useState<BlogIF[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   async function fetchData() {
     setLoading(true);
     const response = await httpRequest({
       type: "get",
-      url: "/blogs?populate=*",
+      url: `/blogs?filters[author][$eq]=${param.author}&populate=*`,
     });
-    setBlogs(response);
+    setBlog(response);
     setLoading(false);
   }
 
@@ -29,19 +30,16 @@ function Homepage() {
   return (
     <div className="wrapper-parent">
       <Hero
-        key={"hero"}
+        loading={loading}
+        isBack={true}
         subTitle={
-          <>
-            <div className="text-p text-white mb-5">
-              <div className="animate-hello inline-block">👋</div> HELLO
-            </div>
-          </>
+          <HeroSubTitle isLeftElement={true} leftElement={param.author} />
         }
       >
-        Insights about my personal and work life, and the in-betweens
+        <p className="capitalize">Blog By Author {param.author}</p>
       </Hero>
 
-      <ListBlog headerName="All Category">
+      <ListBlog headerName={`Author : ${param.author}`}>
         {loading ? (
           <>
             <SkeletonCardBlog />
@@ -75,5 +73,3 @@ function Homepage() {
     </div>
   );
 }
-
-export default Homepage;
