@@ -1,16 +1,9 @@
-import Header from "../components/Header";
-import { Sidebar, SidebarDrawer } from "../components/Sidebar";
+import BaseSidebarHeader from "../layouts/BaseSidebarHeader";
 
 export default function Dashboard() {
   return (
-    <div className="dashboard-app">
-      <SidebarDrawer />
-      <Sidebar />
-      <div className="dash-wrapper">
-        <Header />
-
-        <div className="main-content bg-[#F5F7FA] py-5 px-6 w-full">asdasd</div>
-      </div>
-    </div>
+    <BaseSidebarHeader title="Overview">
+      <h1>Welcome User</h1>
+    </BaseSidebarHeader>
   );
 }

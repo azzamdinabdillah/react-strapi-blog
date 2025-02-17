@@ -35,8 +35,8 @@ const sidebarMenu: {
   },
 
   {
-    title: "transactions",
-    redirect: "/dashboard2",
+    title: "Blogs",
+    redirect: "/dashboard/blogs",
     svg: (
       <svg
         width=""
@@ -114,6 +114,7 @@ function SidebarMenu() {
         <React.Fragment key={index}>
           <NavLink
             to={menu.redirect}
+            end={menu.redirect === "/dashboard"}
             className={({ isActive }) =>
               `flex gap-5 items-center px-6 relative xl:gap-[26px] xl:px-11 ${
                 isActive
@@ -124,9 +125,9 @@ function SidebarMenu() {
           >
             {({ isActive }) => (
               <>
-              <div className="w-5 h-5 xl:w-[25px] xl:h-[25px]">
-                {menu.svg}
-              </div>
+                <div className="w-5 h-5 xl:w-[25px] xl:h-[25px]">
+                  {menu.svg}
+                </div>
                 <p
                   className={`text-base font-medium capitalize transition-all xl:text-lg ${
                     isActive ? "text-primary-3" : "text-gray-b1"
@@ -169,7 +170,11 @@ export function Sidebar() {
   return (
     <>
       <div className="fixed left-0 top-0 bottom-0 w-[231px] xl:w-[250px] hidden lg:inline-block bg-white border-r-[2px] border-[#E6EFF5]">
-        <img src="/icons/dashboard/logo.svg" alt="" className="pt-6 px-6 xl:pt-[31px] xl:px-[38px]" />
+        <img
+          src="/icons/dashboard/logo.svg"
+          alt=""
+          className="pt-6 px-6 xl:pt-[31px] xl:px-[38px]"
+        />
 
         <SidebarMenu />
       </div>

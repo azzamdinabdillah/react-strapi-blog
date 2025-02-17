@@ -5,7 +5,7 @@ function NavbarMenu() {
   return (
     <>
       <div className="text-white text-[18px] font-medium gap-10 flex items-center">
-        <a href="">Design Tools</a>
+        <a href="/dashboard">Dashboard</a>
         <a href="">Daily Updates</a>
         <a href="">Tutorials</a>
         <a href="">Library</a>
@@ -65,7 +65,7 @@ export function NavbarMobile() {
               <img src="/public/icons/close.svg" alt="" className="w-full" />
             </div>
             <div className="text-black text-[20px] font-medium gap-10 flex flex-col items-end">
-              <a href="">Design Tools</a>
+              <a href="/dashboard">Dashboard</a>
               <a href="">Daily Updates</a>
               <a href="">Tutorials</a>
               <a href="">Library</a>
