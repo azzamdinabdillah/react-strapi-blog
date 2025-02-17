@@ -172,9 +172,10 @@
   }
 }
 
-* {
+.blog-app * {
   font-family: "Graphik";
 }
+
 
 @theme {
   --color-blue: #232e52;

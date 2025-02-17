@@ -28,7 +28,7 @@ export default function SingleBlog() {
 
   return (
     <div>
-      <div className="wrapper-parent">
+      <div className="wrapper-parent blog-app">
         <Hero
           loading={loading}
           customClassName="rounded-b-none"

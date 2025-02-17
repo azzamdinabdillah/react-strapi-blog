@@ -27,7 +27,7 @@ function Homepage() {
   }, []);
 
   return (
-    <div className="wrapper-parent">
+    <div className="wrapper-parent blog-app">
       <Hero
         key={"hero"}
         subTitle={

@@ -28,7 +28,7 @@ export default function BlogByAuthor() {
   }, []);
 
   return (
-    <div className="wrapper-parent">
+    <div className="wrapper-parent blog-app">
       <Hero
         loading={loading}
         isBack={true}

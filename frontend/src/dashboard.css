@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-blue-343: #343c6a;
+  --color-gray-b1: #B1B1B1;
+}
+
+.dashboard-app * {
+  font-family: "Inter", serif;
+}
+
+.dashboard-app {
+    padding: 25px;
+}
