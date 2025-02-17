@@ -1,17 +1,20 @@
 import React, { ReactNode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { close } from "../slices/sidebarDrawer";
+import { NavLink } from "react-router";
 
 const sidebarMenu: {
   title: string;
+  redirect: string;
   svg: ReactNode;
 }[] = [
   {
     title: "dashboard",
+    redirect: "/dashboard",
     svg: (
       <svg
-        width="20"
-        height="20"
+        width=""
+        height=""
         viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -33,10 +36,11 @@ const sidebarMenu: {
 
   {
     title: "transactions",
+    redirect: "/dashboard2",
     svg: (
       <svg
-        width="20"
-        height="20"
+        width=""
+        height=""
         viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -74,10 +78,11 @@ const sidebarMenu: {
 
   {
     title: "accounts",
+    redirect: "/dashboard3",
     svg: (
       <svg
-        width="20"
-        height="20"
+        width=""
+        height=""
         viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -102,33 +107,72 @@ const sidebarMenu: {
   },
 ];
 
-export default function SidebarDrawer() {
+function SidebarMenu() {
+  return (
+    <div className="flex flex-col gap-9 mt-12 xl:gap-10">
+      {sidebarMenu.map((menu, index) => (
+        <React.Fragment key={index}>
+          <NavLink
+            to={menu.redirect}
+            className={({ isActive }) =>
+              `flex gap-5 items-center px-6 relative xl:gap-[26px] xl:px-11 ${
+                isActive
+                  ? "before:h-[50px] xl:before:h-[60px] before:w-[5px] xl:before:w-[56x] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:content-[] before:bg-primary-3 before:rounded-tr-[10px] before:rounded-br-[10px]"
+                  : ""
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+              <div className="w-5 h-5 xl:w-[25px] xl:h-[25px]">
+                {menu.svg}
+              </div>
+                <p
+                  className={`text-base font-medium capitalize transition-all xl:text-lg ${
+                    isActive ? "text-primary-3" : "text-gray-b1"
+                  }`}
+                >
+                  {menu.title}
+                </p>
+              </>
+            )}
+          </NavLink>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+export function SidebarDrawer() {
   const dispatch = useDispatch();
   const isOpenSidebar = useSelector((state: any) => state.openSidebarDrawer);
 
   return (
     <div
-      className={`sidebar-drawer fixed top-0 left-0 right-0 bottom-0 w-full bg-white p-6 transition z-10 ${
+      className={`sidebar-drawer fixed top-0 left-0 right-0 bottom-0 w-full bg-white py-6 transition z-10 ${
         isOpenSidebar ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-6">
         <img src="/icons/dashboard/logo.svg" alt="" />
-        <button onClick={() => dispatch(close())} className="cursor-pointer">Close</button>
+        <button onClick={() => dispatch(close())} className="cursor-pointer">
+          Close
+        </button>
       </div>
 
-      <div className="flex flex-col gap-9 mt-12">
-        {sidebarMenu.map((menu, index) => (
-          <React.Fragment key={index}>
-            <div className="flex gap-5 items-center">
-              {menu.svg}
-              <p className="text-base font-medium text-gray-b1 capitalize">
-                {menu.title}
-              </p>
-            </div>
-          </React.Fragment>
-        ))}
-      </div>
+      <SidebarMenu />
     </div>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <>
+      <div className="fixed left-0 top-0 bottom-0 w-[231px] xl:w-[250px] hidden lg:inline-block bg-white border-r-[2px] border-[#E6EFF5]">
+        <img src="/icons/dashboard/logo.svg" alt="" className="pt-6 px-6 xl:pt-[31px] xl:px-[38px]" />
+
+        <SidebarMenu />
+      </div>
+    </>
   );
 }
