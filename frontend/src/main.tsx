@@ -12,6 +12,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { openSidebarDrawer } from "./dashboard/slices/sidebarDrawer";
 import Blogs from "./dashboard/pages/Blogs";
+import Login from "./dashboard/pages/auth/Login";
 
 const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")!).render(
 
           <Route path="/dashboard">
             <Route index element={<Dashboard />} />
+            <Route path="login" element={<Login/>} />
             <Route path="blogs" element={<Blogs />} />
           </Route>
         </Routes>
