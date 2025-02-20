@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+@plugin 'tailwind-scrollbar';
 
 @theme {
   --color-blue-343: #343c6a;
@@ -9,6 +10,7 @@
   --color-primary-3: #2d60ff;
   --color-blue-71: #718ebf;
   --color-black-23: #232323;
+  --color-black-33: #333b69;
 }
 
 .dashboard-app * {
@@ -17,4 +19,29 @@
 
 .main-content {
   height: calc(100vh - 95px);
+}
+
+.section-title {
+  @apply text-[#333b69] text-base font-semibold mb-3 mt-[22px] md:text-[18px] md:mb-4 md:mt-[20px] xl:mt-6 xl:text-[22px];
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #daf0ea;
+  border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
