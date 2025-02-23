@@ -8,12 +8,13 @@
   --color-gray-e6: #e6eff5;
   --color-gray-b1: #b1b1b1;
   --color-gray-f2: #f2f4f7;
-  --color-primary-1: #4045EF;
+  --color-primary-1: #4045ef;
   --color-primary-3: #2d60ff;
   --color-blue-71: #718ebf;
   --color-black-23: #232323;
   --color-black-33: #333b69;
   --color-black-2e: #2e3139;
+  --color-red-d9: #d91b1b;
 }
 
 .dashboard-app * {

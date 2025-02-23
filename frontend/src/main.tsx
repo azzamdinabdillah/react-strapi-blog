@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import { openSidebarDrawer } from "./dashboard/slices/sidebarDrawer";
 import Blogs from "./dashboard/pages/Blogs";
 import Login from "./dashboard/pages/auth/Login";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const store = configureStore({
   reducer: {
@@ -20,28 +21,32 @@ const store = configureStore({
   },
 });
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/blog">
-            <Route path=":id/:slug" element={<SingleBlog />} />
-            <Route
-              path="category/:documentId/:slug"
-              element={<BlogByCategory />}
-            />
-            <Route path="author/:author" element={<BlogByAuthor />} />
-          </Route>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/blog">
+              <Route path=":id/:slug" element={<SingleBlog />} />
+              <Route
+                path="category/:documentId/:slug"
+                element={<BlogByCategory />}
+              />
+              <Route path="author/:author" element={<BlogByAuthor />} />
+            </Route>
 
-          <Route path="/dashboard">
-            <Route index element={<Dashboard />} />
-            <Route path="login" element={<Login/>} />
-            <Route path="blogs" element={<Blogs />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+            <Route path="/dashboard">
+              <Route index element={<Dashboard />} />
+              <Route path="login" element={<Login />} />
+              <Route path="blogs" element={<Blogs />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
   </StrictMode>
 );
