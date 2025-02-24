@@ -2,8 +2,12 @@ import { produce } from "immer";
 import { FormEvent, useState } from "react";
 import { httpRequest } from "../../../helpers/http-request";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../slices/authSlices";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState<{
     identifier: string;
     password: string;
@@ -12,31 +16,7 @@ export default function Login() {
     password: "1234567",
   });
 
-  const [error, setError] = useState<null | any>(null);
-
-  // async function handleSubmit(e: SubmitEvent) {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await httpRequest({
-  //       type: "post",
-  //       url: "/auth/local",
-  //       body: inputs,
-  //     });
-
-  //     if (res.status === 200) {
-  //       const resAuth = res as AuthIF;
-
-  //       console.log(resAuth.data.user.username);
-  //     } else {
-  //       const resAuth = res as AuthErrorIF;
-
-  //       console.log(resAuth.error.message);
-  //     }
-  //   } catch (error) {
-  //     // console.log(errorCatchAxios(error));
-  //     setError(errorCatchAxios(error));
-  //   }
-  // }
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -47,11 +27,10 @@ export default function Login() {
       });
     },
     onSuccess: (data) => {
-      console.log("berhasil " + data);
+      dispatch(setToken(data.jwt));
+      navigate("/dashboard");
     },
-    onError: (data) => {
-      setError(data);
-    },
+    // onError: (data) => {},
   });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -84,11 +63,11 @@ export default function Login() {
               <div className="gap-4 flex flex-col">
                 <p
                   className={`flex items-center gap-1 text-red-d9 text-xs font-normal ${
-                    error == null ? "hidden" : ""
+                    !mutation.isError ? "hidden" : ""
                   }`}
                 >
                   <img src="/dashboard/icons/error-login.svg" alt="" />
-                  {error}
+                  {String(mutation.error)}
                 </p>
                 <div className="gap-1.5 flex flex-col">
                   <label
