@@ -11,10 +11,11 @@ import Dashboard from "./dashboard/pages/Dashboard";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { openSidebarDrawer } from "./dashboard/slices/sidebarDrawer";
-import Blogs from "./dashboard/pages/Blogs";
+import Blogs from "./dashboard/pages/blogs/Blogs";
 import Login from "./dashboard/pages/auth/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { authSlice } from "./dashboard/slices/authSlices";
+import AddBlog from "./dashboard/pages/blogs/AddBlog";
 
 const store = configureStore({
   reducer: {
@@ -53,7 +54,10 @@ createRoot(document.getElementById("root")!).render(
 
             <Route path="/dashboard" element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
-              <Route path="blogs" element={<Blogs />} />
+              <Route path="blogs">
+                <Route index element={<Blogs />} />
+                <Route path="add-blog" element={<AddBlog />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

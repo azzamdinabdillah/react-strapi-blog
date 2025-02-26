@@ -5,11 +5,13 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { BlogIF } from "../../interface/BlogIF";
-import BaseSidebarHeader from "../layouts/BaseSidebarHeader";
+import { BlogIF } from "../../../interface/BlogIF";
+import BaseSidebarHeader from "../../layouts/BaseSidebarHeader";
 import { useEffect, useState } from "react";
-import { httpRequest } from "../../helpers/http-request";
-import CardStat from "../components/CardStat";
+import { httpRequest } from "../../../helpers/http-request";
+import CardStat from "../../components/CardStat";
+import Button from "../../components/Button";
+import { Link } from "react-router";
 
 const columns: ColumnDef<BlogIF>[] = [
   {
@@ -83,7 +85,12 @@ export default function Blogs() {
         </div>
       </div>
 
-      <h5 className="section-title">Blogs List</h5>
+      <div className="flex items-center justify-between divider-section">
+        <h5 className="section-title">Blogs List</h5>
+        <Link to={"/dashboard/blogs/add-blog"}>
+          <Button>Add Blog</Button>
+        </Link>
+      </div>
 
       <div className="py-[17px] md:py-[22px] pb-[2px] px-5 bg-white rounded-2xl xl:px-[30px]">
         <div className="overflow-auto">

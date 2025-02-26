@@ -5,6 +5,7 @@
 @theme {
   --color-blue-343: #343c6a;
   --color-blue-42: #425583;
+  --color-blue-18: #1814f3;
   --color-gray-e6: #e6eff5;
   --color-gray-b1: #b1b1b1;
   --color-gray-f2: #f2f4f7;
@@ -25,8 +26,12 @@
   height: calc(100vh - 95px);
 }
 
+.divider-section {
+  @apply mb-3 mt-[22px] md:mb-4 md:mt-[20px] xl:mt-6;
+}
+
 .section-title {
-  @apply text-[#333b69] text-base font-semibold mb-3 mt-[22px] md:text-[18px] md:mb-4 md:mt-[20px] xl:mt-6 xl:text-[22px];
+  @apply text-[#333b69] text-base font-semibold md:text-[18px] xl:text-[22px];
 }
 
 ::-webkit-scrollbar {
