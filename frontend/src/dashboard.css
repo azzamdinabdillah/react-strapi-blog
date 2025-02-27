@@ -9,6 +9,7 @@
   --color-gray-e6: #e6eff5;
   --color-gray-b1: #b1b1b1;
   --color-gray-f2: #f2f4f7;
+  --color-gray-df: #dfeaf2;
   --color-primary-1: #4045ef;
   --color-primary-3: #2d60ff;
   --color-blue-71: #718ebf;
@@ -32,6 +33,14 @@
 
 .section-title {
   @apply text-[#333b69] text-base font-semibold md:text-[18px] xl:text-[22px];
+}
+
+.input-dashboard-typography {
+  @apply text-black-23 text-xs font-normal;
+}
+
+.input-style {
+  @apply w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography;
 }
 
 ::-webkit-scrollbar {

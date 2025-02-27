@@ -64,7 +64,7 @@ export default function Blogs() {
   });
 
   return (
-    <BaseSidebarHeader title="Overview">
+    <BaseSidebarHeader title="Blogs">
       <div className="top">
         <div className="flex gap-4 w-full overflow-auto ">
           <CardStat
