@@ -24,7 +24,7 @@
 }
 
 .main-content {
-  height: calc(100vh - 95px);
+  min-height: calc(100vh - 95px);
 }
 
 .divider-section {
@@ -40,7 +40,7 @@
 }
 
 .input-style {
-  @apply w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography;
+  @apply w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71;
 }
 
 ::-webkit-scrollbar {
