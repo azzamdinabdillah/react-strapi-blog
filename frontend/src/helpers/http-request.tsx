@@ -1,19 +1,19 @@
 import axios from "axios";
 import { HttpRequest } from "../interface/HttpRequest";
+import api from "./axios-config";
 
-export async function httpRequest({ type, url, body }: HttpRequest) {
-  const env = import.meta.env;
+export async function httpRequest({ type, url, body, config }: HttpRequest) {
   let response = null;
 
   try {
     switch (type) {
       case "get":
-        response = await axios.get(env.VITE_API_URL + url);
+        response = await api.get(url);
         return response.data.data;
         break;
 
       case "post":
-        response = await axios.post(env.VITE_API_URL + url, body);
+        response = await api.post(url, body, config);
         return response.data;
         break;
 
