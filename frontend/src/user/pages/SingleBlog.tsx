@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { BlogIF } from "../../interface/BlogIF";
 import { httpRequest } from "../../helpers/http-request";
 import { formatDate } from "../../helpers/format-date";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import { SkeletonSingleBlog } from "../components/Skeletons";
+import DOMPurify from "dompurify";
 
 export default function SingleBlog() {
   const param = useParams();
@@ -55,7 +55,7 @@ export default function SingleBlog() {
             />
 
             <div className="md:max-w-[850px] lg:max-w-[970px] w-full rich-text px-3 py-5 mx-auto md:py-10 lg:py-16 xl:py-28">
-              <BlocksRenderer content={(blog?.content as []) ?? []} />
+              <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(String(blog?.content || ""))}} />
             </div>
           </div>
         )}

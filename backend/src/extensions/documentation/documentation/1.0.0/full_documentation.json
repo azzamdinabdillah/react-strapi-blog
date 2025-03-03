@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-03-02T03:02:51.677Z"
+    "x-generation-date": "2025-03-03T04:15:21.075Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -2511,7 +2511,6 @@
           "data": {
             "required": [
               "title",
-              "content",
               "author"
             ],
             "type": "object",
@@ -2519,7 +2518,6 @@
               "title": {
                 "type": "string"
               },
-              "content": {},
               "category": {
                 "oneOf": [
                   {
@@ -2549,6 +2547,9 @@
                 "type": "string"
               },
               "slug": {
+                "type": "string"
+              },
+              "content": {
                 "type": "string"
               },
               "locale": {
@@ -2611,7 +2612,6 @@
         "type": "object",
         "required": [
           "title",
-          "content",
           "author"
         ],
         "properties": {
@@ -2624,7 +2624,6 @@
           "title": {
             "type": "string"
           },
-          "content": {},
           "category": {
             "type": "object",
             "properties": {
@@ -3300,6 +3299,9 @@
           "slug": {
             "type": "string"
           },
+          "content": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -3351,7 +3353,6 @@
                 "title": {
                   "type": "string"
                 },
-                "content": {},
                 "category": {
                   "type": "object",
                   "properties": {
@@ -3499,6 +3500,9 @@
                   "type": "string"
                 },
                 "slug": {
+                  "type": "string"
+                },
+                "content": {
                   "type": "string"
                 },
                 "createdAt": {

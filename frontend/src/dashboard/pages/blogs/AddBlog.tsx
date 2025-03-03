@@ -12,6 +12,7 @@ import { httpRequest } from "../../../helpers/http-request";
 import { produce } from "immer";
 import Button from "../../components/Button";
 import { useMutation } from "@tanstack/react-query";
+import { RichText } from "../../components/RichText";
 
 interface InputPostIF {
   title: string;
@@ -23,21 +24,114 @@ interface InputPostIF {
 }
 
 export default function AddBlog() {
+  const [content, setContent] = useState<JSONContent | undefined>(undefined);
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryIF[]>([]);
   const [inputs, setInputs] = useState<InputPostIF>({
     author: "Azam Din Abdillah",
-    category: "dzwqgmvm4sy98oaaldzt7mv1",
+    // category: "dzwqgmvm4sy98oaaldzt7mv1",
+    category: "xy46jis1ufhncvhlmk170lc9",
     content: [
       {
-        type: "paragraph",
-        children: [
+        "type": "doc",
+        "from": 0,
+        "to": 574,
+        "content": [
           {
-            text: "mereknya acer",
-            type: "text",
+            "type": "heading",
+            "from": 0,
+            "to": 11,
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "from": 1,
+                "to": 10,
+                "text": "Hi there,"
+              }
+            ]
           },
-        ],
+          {
+            "type": "paragraph",
+            "from": 11,
+            "to": 169,
+            "content": [
+              {
+                "type": "text",
+                "from": 12,
+                "to": 22,
+                "text": "this is a "
+              },
+              {
+                "type": "text",
+                "from": 22,
+                "to": 27,
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ],
+                "text": "basic"
+              },
+              {
+                "type": "text",
+                "from": 27,
+                "to": 39,
+                "text": " example of "
+              },
+              {
+                "type": "text",
+                "from": 39,
+                "to": 45,
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "Tiptap"
+              },
+              {
+                "type": "text",
+                "from": 45,
+                "to": 168,
+                "text": ". Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:"
+              }
+            ]
+          },
+          {
+            "type": "bullet_list",
+            "from": 169,
+            "to": 230,
+            "content": [
+              {
+                "type": "list_item",
+                "from": 170,
+                "to": 205,
+                "attrs": {
+                  "color": ""
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "from": 171,
+                    "to": 204,
+                    "content": [
+                      {
+                        "type": "text",
+                        "from": 172,
+                        "to": 203,
+                        "text": "That’s a bullet list with one …"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
     ],
     description: "dan ini adalah deskripsi",
@@ -107,22 +201,14 @@ export default function AddBlog() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const imageUpload = await mutationImage.mutateAsync(image);
-    console.log(inputs);
     const imageId = imageUpload[0].id;
 
     // 3. Update `inputs` sebelum submit ke `/blogs`
     const newInputs = {
       ...inputs,
       image: imageId, // Pastikan `image` memiliki ID yang valid
-      // slug: 'testtt'
     };
-
-    console.log("Data sebelum submit:", newInputs);
-
-    // 4. Submit data ke Strapi
     await mutation.mutateAsync(newInputs);
-
-    // await mutation.mutateAsync();
   }
 
   useEffect(() => {
@@ -196,7 +282,7 @@ export default function AddBlog() {
               ""
             )}
           </div>
-          <InputTextGroup
+          {/* <InputTextGroup
             placeholder="Write your content here"
             label="Content"
             value={inputs.content}
@@ -207,7 +293,8 @@ export default function AddBlog() {
                 })
               )
             }
-          />
+          /> */}
+          <RichText/>
 
           <Button buttonType="submit" customClassName="w-fit">
             Submit
