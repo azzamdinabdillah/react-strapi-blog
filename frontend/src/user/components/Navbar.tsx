@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "./Button";
+import { Link } from "react-router";
 
 function NavbarMenu() {
   return (
@@ -18,7 +19,9 @@ function NavbarMenu() {
 export function Navbar() {
   return (
     <div className="hidden lg:flex justify-between items-center lg:py-10 lg:max-w-[925px] xl:py-14 xl:max-w-[1260px] mx-auto absolute top-0 left-0 right-0 xl:px-20">
-      <img src="/public/icons/brand.svg" alt="" />
+      <Link to={"/"}>
+        <img src="/public/icons/brand.svg" alt="" />
+      </Link>
       <NavbarMenu />
     </div>
   );

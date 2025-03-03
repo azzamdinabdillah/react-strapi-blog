@@ -1,6 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import { Label } from "./Label";
-import { ReactNode } from "react";
+import { ChangeEventHandler, ReactNode } from "react";
 
 export interface SelectIF {
   value: string;
@@ -11,13 +10,15 @@ export interface SelectIF {
 export function Select({
   option,
   selected,
+  onChange
 }: {
   option: SelectIF[];
   selected?: string;
+  onChange: ChangeEventHandler<HTMLSelectElement>
 }) {
   return (
     <div className="relative w-full rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography">
-      <select className="appearance-none w-full h-full py-3 px-4" name="" id="">
+      <select className="appearance-none w-full h-full py-3 px-4" name="" id="" onChange={onChange}>
         {option.map((opt, index) => (
           <Fragment key={index}>
             <option
@@ -38,19 +39,19 @@ export function Select({
   );
 }
 
-export function SelectGroup({
-  label,
-  option,
-  selected,
-}: {
-  label: string;
-  option: SelectIF[];
-  selected: string;
-}) {
-  return (
-    <div className="flex flex-col gap-[9px]">
-      <Label label={label} />
-      <Select option={option} selected={selected} />
-    </div>
-  );
-}
+// export function SelectGroup({
+//   label,
+//   option,
+//   selected,
+// }: {
+//   label: string;
+//   option: SelectIF[];
+//   selected: string;
+// }) {
+//   return (
+//     <div className="flex flex-col gap-[9px]">
+//       <Label label={label} />
+//       <Select onChange={option.on} option={option} selected={selected} />
+//     </div>
+//   );
+// }

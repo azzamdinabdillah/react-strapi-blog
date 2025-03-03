@@ -7,7 +7,6 @@ export interface InputIF {
   label?: string;
   onChangeInput?: React.ChangeEventHandler<HTMLInputElement>;
   onChangeTextarea?: React.ChangeEventHandler<HTMLTextAreaElement>;
-  onChangeSelect?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 export function InputText({ placeholder, onChangeInput, value }: InputIF) {

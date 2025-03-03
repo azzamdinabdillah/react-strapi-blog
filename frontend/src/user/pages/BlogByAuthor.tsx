@@ -49,7 +49,7 @@ export default function BlogByAuthor() {
         ) : (
           blogs.map((blog, index) => (
             <Fragment key={index}>
-              <Link to={`/blog/${blog.documentId}/${blog.slug}`}>
+              <Link className="w-full" to={`/blog/${blog.documentId}/${blog.slug}`}>
                 <CardBlog
                   author={blog.author}
                   image={{

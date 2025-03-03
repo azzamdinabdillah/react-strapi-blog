@@ -19,7 +19,7 @@
   --color-red-d9: #d91b1b;
 }
 
-/* .rsw-ce ul {
+.rsw-ce ul {
   list-style: disc;
   padding-left: 2em;
 }
@@ -27,7 +27,7 @@
 .rsw-ce ol {
   list-style: decimal;
   padding-left: 2em;
-} */
+}
 
 .dashboard-app * {
   font-family: "Inter", serif;
