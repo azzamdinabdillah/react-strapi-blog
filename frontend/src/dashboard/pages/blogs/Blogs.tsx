@@ -121,6 +121,7 @@ export default function Blogs() {
                   } border-gray-f2`}
                 >
                   {row.getVisibleCells().map((cell) => (
+                    <>
                     <td
                       key={cell.id}
                       className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
@@ -130,7 +131,13 @@ export default function Blogs() {
                         cell.getContext()
                       )}
                     </td>
+                    </>
                   ))}
+                  <td>
+                    <Link to={`edit-blog/${row.original.documentId}/${row.original.slug}`}>
+                      <Button size="xs" buttonType="button">Edit</Button>
+                    </Link>
+                    </td>
                 </tr>
               ))}
             </tbody>

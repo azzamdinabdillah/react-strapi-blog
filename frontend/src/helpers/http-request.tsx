@@ -17,6 +17,11 @@ export async function httpRequest({ type, url, body, config }: HttpRequest) {
         return response.data;
         break;
 
+      case "put":
+        response = await api.put(url, body, config);
+        return response.data;
+        break;
+
       default:
         break;
     }

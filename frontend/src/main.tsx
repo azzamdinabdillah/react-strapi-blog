@@ -15,7 +15,7 @@ import Blogs from "./dashboard/pages/blogs/Blogs";
 import Login from "./dashboard/pages/auth/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { authSlice } from "./dashboard/slices/authSlices";
-import AddBlog from "./dashboard/pages/blogs/AddBlog";
+import FormBlog from "./dashboard/pages/blogs/FormBlog";
 
 const store = configureStore({
   reducer: {
@@ -56,7 +56,8 @@ createRoot(document.getElementById("root")!).render(
               <Route index element={<Dashboard />} />
               <Route path="blogs">
                 <Route index element={<Blogs />} />
-                <Route path="add-blog" element={<AddBlog />} />
+                <Route path="add-blog" element={<FormBlog />} />
+                <Route path="edit-blog/:id/:slug" element={<FormBlog />} />
               </Route>
             </Route>
           </Routes>

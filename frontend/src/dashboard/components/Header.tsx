@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import Avatar from "./Avatar";
 import { open } from "../slices/sidebarDrawer";
+import { Link } from "react-router";
 
 export default function Header({ title }: { title: string }) {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ export default function Header({ title }: { title: string }) {
         {title}
       </h3>
       <div className="flex gap-5 items-center">
+        <Link to={'/'}>Home</Link>
         <img
           src="/dashboard/icons/settings-header.svg"
           alt=""

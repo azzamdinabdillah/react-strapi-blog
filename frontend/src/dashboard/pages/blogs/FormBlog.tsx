@@ -11,8 +11,9 @@ import { CategoryIF } from "../../../interface/BlogIF";
 import { httpRequest } from "../../../helpers/http-request";
 import { produce } from "immer";
 import Button from "../../components/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { RichText } from "../../components/RichText";
+import { useParams } from "react-router";
 
 interface InputPostIF {
   title: string;
@@ -23,7 +24,9 @@ interface InputPostIF {
   content: any;
 }
 
-export default function AddBlog() {
+export default function FormBlog() {
+  const params = useParams();
+  const [isEditPage, setIsEditPage] = useState<boolean>(false)
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryIF[]>([]);
@@ -36,6 +39,38 @@ export default function AddBlog() {
     image: 0,
     title: "Cara Ngoding JavaScript",
   });
+
+  if (params.id) {
+    const {data: editData, error: editDataError, isLoading: editDataLoading} = useQuery({
+      queryKey: ['editData'],
+      queryFn: async () => {
+        const response = await httpRequest({
+          type: "get",
+          url: `/blogs/${params.id}?populate=*`
+        });
+
+        return response;
+      }
+    });
+
+    useEffect(() => {
+      if (editData) {
+        setInputs({
+          author: editData.author,
+          category: editData.category,
+          content: editData.content,
+          description: editData.description,
+          image: editData.image,
+          title: editData.title
+        });
+        setIsEditPage(true);
+      }
+    }, [editData])
+  }else{
+    useEffect(() => {
+      setIsEditPage(false);
+    }, [])
+  }
 
   async function getCategories(): Promise<CategoryIF[] | void> {
     const response = await httpRequest({
@@ -78,8 +113,8 @@ export default function AddBlog() {
   const mutation = useMutation({
     mutationFn: async (dataPost: InputPostIF) => {
       return await httpRequest({
-        type: "post",
-        url: "/blogs",
+        type: isEditPage ? "put" : "post",
+        url: isEditPage ? `/blogs/${params.id}` : "/blogs",
         body: JSON.stringify({
           data: dataPost,
         }),
@@ -98,16 +133,24 @@ export default function AddBlog() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const imageUpload = await mutationImage.mutateAsync(image);
-    const imageId = imageUpload[0].id;
-    const newInputs = {
-      ...inputs,
-      image: imageId,
-    };
-
-    console.log(newInputs);
-
-    await mutation.mutateAsync(newInputs);
+    
+    if (isEditPage) {
+      const imageUpload = await mutationImage.mutateAsync(image);
+      const imageId = imageUpload[0].id;
+      const newInputs = {
+        ...inputs,
+        image: imageId,
+      };
+      await mutation.mutateAsync(newInputs);
+    }else{
+      const imageUpload = await mutationImage.mutateAsync(image);
+      const imageId = imageUpload[0].id;
+      const newInputs = {
+        ...inputs,
+        image: imageId,
+      };
+      await mutation.mutateAsync(newInputs);
+    }
   }
 
   useEffect(() => {
@@ -115,7 +158,7 @@ export default function AddBlog() {
   }, []);
 
   return (
-    <BaseSidebarHeader title="Blogs / Add Blog">
+    <BaseSidebarHeader title={`Blog / ${isEditPage ? 'Edit Blog' : 'Add Blog'}`}>
       <div className="py-5.5 px-5 bg-white rounded-2xl">
         <form className="gap-4 flex flex-col" onSubmit={handleSubmit}>
           <InputTextGroup
@@ -190,18 +233,6 @@ export default function AddBlog() {
               ""
             )}
           </div>
-          {/* <InputTextGroup
-            placeholder="Write your content here"
-            label="Content"
-            value={inputs.content}
-            onChangeInput={(e) =>
-              setInputs(
-                produce((draft) => {
-                  draft.content = e.target.value;
-                })
-              )
-            }
-          /> */}
           <div className="flex flex-col gap-[9px]">
             <Label label="Content" />
             <RichText

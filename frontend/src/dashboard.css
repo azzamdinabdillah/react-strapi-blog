@@ -19,6 +19,39 @@
   --color-red-d9: #d91b1b;
 }
 
+.rsw-editor {
+  border: 1px solid #dfeaf2 !important;
+  min-height: 200px !important;
+}
+
+.rsw-toolbar {
+  background-color: rgba(245, 245, 245, 0.5) !important;
+  border-bottom: 1px solid #dfeaf2 !important;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.rsw-btn svg {
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
+
+.rsw-btn[data-active="true"]{
+  background-color: #343c6a !important;
+  color: white;
+  border-radius: 5px;
+}
+
+.rsw-btn span,
+.rsw-toolbar select {
+  font-size: 15px;
+}
+
+.rsw-separator {
+  display: none !important;
+}
+
 .rsw-ce ul {
   list-style: disc;
   padding-left: 2em;
@@ -27,6 +60,13 @@
 .rsw-ce ol {
   list-style: decimal;
   padding-left: 2em;
+}
+
+@media (min-width: 768px) {
+  .rsw-toolbar {
+    padding: 10px;
+    gap: 20px;
+  }
 }
 
 .dashboard-app * {
