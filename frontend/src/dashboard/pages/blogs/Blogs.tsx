@@ -42,7 +42,7 @@ export default function Blogs() {
   async function fetchData() {
     const response = await httpRequest({
       type: "get",
-      url: "/blogs?populate=*",
+      url: "/blogs?populate=*&pagination[pageSize]=100",
     });
     setBlogPosts(response);
   }
@@ -88,7 +88,7 @@ export default function Blogs() {
       <div className="flex items-center justify-between divider-section">
         <h5 className="section-title">Blogs List</h5>
         <Link to={"/dashboard/blogs/add-blog"}>
-          <Button>Add Blog</Button>
+          <Button buttonType="button">Add Blog</Button>
         </Link>
       </div>
 

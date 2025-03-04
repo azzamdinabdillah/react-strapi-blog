@@ -14,6 +14,7 @@ import Button from "../../components/Button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RichText } from "../../components/RichText";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
 
 interface InputPostIF {
   title: string;
@@ -26,7 +27,7 @@ interface InputPostIF {
 
 export default function FormBlog() {
   const params = useParams();
-  const [isEditPage, setIsEditPage] = useState<boolean>(false)
+  const [isEditPage, setIsEditPage] = useState<boolean>(false);
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryIF[]>([]);
@@ -41,35 +42,37 @@ export default function FormBlog() {
   });
 
   if (params.id) {
-    const {data: editData, error: editDataError, isLoading: editDataLoading} = useQuery({
-      queryKey: ['editData'],
+    const {
+      data: editData
+    } = useQuery({
+      queryKey: ["editData"],
       queryFn: async () => {
         const response = await httpRequest({
           type: "get",
-          url: `/blogs/${params.id}?populate=*`
+          url: `/blogs/${params.id}?populate=*`,
         });
 
         return response;
-      }
+      },
     });
 
     useEffect(() => {
       if (editData) {
         setInputs({
           author: editData.author,
-          category: editData.category,
+          category: editData.category.documentId,
           content: editData.content,
           description: editData.description,
           image: editData.image,
-          title: editData.title
+          title: editData.title,
         });
         setIsEditPage(true);
       }
-    }, [editData])
-  }else{
+    }, [editData]);
+  } else {
     useEffect(() => {
       setIsEditPage(false);
-    }, [])
+    }, []);
   }
 
   async function getCategories(): Promise<CategoryIF[] | void> {
@@ -107,7 +110,10 @@ export default function FormBlog() {
 
       return response;
     },
-    onError: (error) => console.log(error),
+    onSuccess: () => {
+      toast.success("Image uploaded succesfully");
+    },
+    onError: () => toast.success("Image uploaded failed"),
   });
 
   const mutation = useMutation({
@@ -125,32 +131,22 @@ export default function FormBlog() {
         },
       });
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      toast.success(`Data ${isEditPage ? 'Edited' : "Added"} succesfully`);
     },
-    onError: (error) => console.log(error),
+    onError: () => toast.success("Data added failed"),
   });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    
-    if (isEditPage) {
-      const imageUpload = await mutationImage.mutateAsync(image);
-      const imageId = imageUpload[0].id;
-      const newInputs = {
-        ...inputs,
-        image: imageId,
-      };
-      await mutation.mutateAsync(newInputs);
-    }else{
-      const imageUpload = await mutationImage.mutateAsync(image);
-      const imageId = imageUpload[0].id;
-      const newInputs = {
-        ...inputs,
-        image: imageId,
-      };
-      await mutation.mutateAsync(newInputs);
-    }
+
+    const imageUpload = await mutationImage.mutateAsync(image);
+    const imageId = imageUpload[0].id;
+    const newInputs = {
+      ...inputs,
+      image: imageId,
+    };
+    await mutation.mutateAsync(newInputs);
   }
 
   useEffect(() => {
@@ -158,7 +154,9 @@ export default function FormBlog() {
   }, []);
 
   return (
-    <BaseSidebarHeader title={`Blog / ${isEditPage ? 'Edit Blog' : 'Add Blog'}`}>
+    <BaseSidebarHeader
+      title={`Blog / ${isEditPage ? "Edit Blog" : "Add Blog"}`}
+    >
       <div className="py-5.5 px-5 bg-white rounded-2xl">
         <form className="gap-4 flex flex-col" onSubmit={handleSubmit}>
           <InputTextGroup
@@ -247,8 +245,40 @@ export default function FormBlog() {
             />
           </div>
 
-          <Button buttonType="submit" customClassName="w-fit">
-            Submit
+          <Button
+            disabled={
+              mutation.isPending || mutationImage.isPending ? true : false
+            }
+            buttonType="submit"
+            customClassName="w-fit"
+          >
+            {mutation.isPending || mutationImage.isPending ? (
+              <div className="flex items-center justify-center gap-2">
+                Loading
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx={12}
+                    cy={12}
+                    r={10}
+                    stroke="currentColor"
+                    strokeWidth={4}
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+              </div>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </div>
