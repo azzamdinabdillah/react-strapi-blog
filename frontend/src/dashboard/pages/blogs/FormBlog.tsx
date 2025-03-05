@@ -132,7 +132,7 @@ export default function FormBlog() {
       });
     },
     onSuccess: () => {
-      toast.success(`Data ${isEditPage ? 'Edited' : "Added"} succesfully`);
+      toast.success(`Data ${isEditPage ? 'Updated' : "Added"} succesfully`);
     },
     onError: () => toast.success("Data added failed"),
   });

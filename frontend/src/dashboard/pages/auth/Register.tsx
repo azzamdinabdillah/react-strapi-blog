@@ -5,15 +5,22 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../slices/authSlices";
+import { toast } from "react-toastify";
 
-export default function Login() {
+export default function Register() {
   const dispatch = useDispatch();
   const [inputs, setInputs] = useState<{
-    identifier: string;
+    firstname: string;
+    lastname: string;
+    username: string;
+    email: string;
     password: string;
   }>({
-    identifier: "azam@gmail.com",
-    password: "1234567",
+    username: "doni",
+    email: "doni@gmail.com",
+    password: "123456",
+    firstname: "doni",
+    lastname: "saputra",
   });
 
   const navigate = useNavigate();
@@ -22,13 +29,21 @@ export default function Login() {
     mutationFn: async () => {
       return await httpRequest({
         type: "post",
-        url: "/auth/local",
-        body: inputs,
+        url: "/auth/local/register",
+        body: JSON.stringify({ ...inputs }),
+        config: {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       });
     },
-    onSuccess: (data) => {
-      dispatch(setToken(data.jwt));
-      navigate("/dashboard");
+    onSuccess: () => {
+      toast.success("Register Successfully, please login", {
+        onClose() {
+          navigate("/dashboard");
+        },
+      });
     },
     // onError: (data) => {},
   });
@@ -52,10 +67,10 @@ export default function Login() {
           <div className="bg-white rounded-3xl py-8 px-5 w-[90%] mx-auto gap-8 flex flex-col absolute -bottom-[140%] left-1/2 -translate-x-1/2 md:max-w-[700px] xl:static xl:translate-0 xl:max-w-[400px] xl:p-0 xl:gap-12">
             <div className="title gap-2 flex flex-col">
               <h1 className="text-2xl text-[#2E3139] font-bold xl:text-[32px]">
-                Welcome Back
+                Welcome
               </h1>
               <h2 className="text-[#425583] font-normal text-sm">
-                Sign in to your account
+                Sign up your account
               </h2>
             </div>
 
@@ -74,16 +89,102 @@ export default function Login() {
                     htmlFor=""
                     className="text-xs text-[#2E3139] font-normal"
                   >
+                    First Name
+                  </label>
+                  <div className="relative">
+                    <input
+                      value={inputs.firstname}
+                      placeholder="Enter your firstname"
+                      onChange={(e) =>
+                        setInputs(
+                          produce((draft) => {
+                            draft.firstname = e.target.value;
+                          })
+                        )
+                      }
+                      type="text"
+                      className="rounded-full w-full before:content-[] h-12 flex justify-center items-center border border-[#D3E0FE] focus:border-[#4045EF] outline-none placeholder:text-sm placeholder:font-normal placeholder:text-[#899CC9] text-[#2E3139] text-sm font-normal px-4 pl-[42px]"
+                    />
+                    <img
+                      src="/dashboard/icons/email-login.svg"
+                      alt=""
+                      className="bg-contain bg-no-repeat bg-center block w-4 h-4 absolute top-1/2 -translate-y-1/2 left-4"
+                    />
+                  </div>
+                </div>
+                <div className="gap-1.5 flex flex-col">
+                  <label
+                    htmlFor=""
+                    className="text-xs text-[#2E3139] font-normal"
+                  >
+                    Last Name
+                  </label>
+                  <div className="relative">
+                    <input
+                      value={inputs.lastname}
+                      placeholder="Enter your lastname"
+                      onChange={(e) =>
+                        setInputs(
+                          produce((draft) => {
+                            draft.lastname = e.target.value;
+                          })
+                        )
+                      }
+                      type="text"
+                      className="rounded-full w-full before:content-[] h-12 flex justify-center items-center border border-[#D3E0FE] focus:border-[#4045EF] outline-none placeholder:text-sm placeholder:font-normal placeholder:text-[#899CC9] text-[#2E3139] text-sm font-normal px-4 pl-[42px]"
+                    />
+                    <img
+                      src="/dashboard/icons/email-login.svg"
+                      alt=""
+                      className="bg-contain bg-no-repeat bg-center block w-4 h-4 absolute top-1/2 -translate-y-1/2 left-4"
+                    />
+                  </div>
+                </div>
+
+                <div className="gap-1.5 flex flex-col">
+                  <label
+                    htmlFor=""
+                    className="text-xs text-[#2E3139] font-normal"
+                  >
+                    Username
+                  </label>
+                  <div className="relative">
+                    <input
+                      value={inputs.username}
+                      placeholder="Enter your username"
+                      onChange={(e) =>
+                        setInputs(
+                          produce((draft) => {
+                            draft.username = e.target.value;
+                          })
+                        )
+                      }
+                      type="text"
+                      className="rounded-full w-full before:content-[] h-12 flex justify-center items-center border border-[#D3E0FE] focus:border-[#4045EF] outline-none placeholder:text-sm placeholder:font-normal placeholder:text-[#899CC9] text-[#2E3139] text-sm font-normal px-4 pl-[42px]"
+                    />
+                    <img
+                      src="/dashboard/icons/email-login.svg"
+                      alt=""
+                      className="bg-contain bg-no-repeat bg-center block w-4 h-4 absolute top-1/2 -translate-y-1/2 left-4"
+                    />
+                  </div>
+                </div>
+
+                <div className="gap-1.5 flex flex-col">
+                  <label
+                    htmlFor=""
+                    className="text-xs text-[#2E3139] font-normal"
+                  >
                     Email
                   </label>
                   <div className="relative">
                     <input
-                      value={inputs.identifier}
+                      value={inputs.email}
                       placeholder="Enter your email"
                       onChange={(e) =>
                         setInputs(
                           produce((draft) => {
-                            draft.identifier = e.target.value;
+                            draft.email = e.target.value;
                           })
                         )
                       }
@@ -126,21 +227,6 @@ export default function Login() {
                     />
                   </div>
                 </div>
-
-                <div className="flex justify-between items-center">
-                  <div className="flex gap-1.5 items-center">
-                    <input
-                      type="checkbox"
-                      className="border border-[#4045EF] rounded-sm w-[18px] h-[18px] appearance-none"
-                    />
-                    <p className="text-sm font-normal text-black-2e">
-                      Remember Me
-                    </p>
-                  </div>
-                  <p className="text-sm font-medium text-primary-1">
-                    Forgot Password
-                  </p>
-                </div>
               </div>
 
               <div className="">
@@ -173,19 +259,19 @@ export default function Login() {
                       </svg>
                     </div>
                   ) : (
-                    "Sign In"
+                    "Sign Up"
                   )}
                 </button>
               </div>
 
               <div>
                 <p className="font-normal text-sm text-blue-42 text-center">
-                  Don’t have an account?{" "}
+                  already have an account?{" "}
                   <Link
-                    to={"/register"}
+                    to={"/login"}
                     className="text-primary-1 font-medium hover:underline"
                   >
-                    Sign Up
+                    Sign in
                   </Link>
                 </p>
               </div>
