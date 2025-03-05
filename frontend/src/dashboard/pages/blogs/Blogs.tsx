@@ -7,11 +7,13 @@ import {
 } from "@tanstack/react-table";
 import { BlogIF } from "../../../interface/BlogIF";
 import BaseSidebarHeader from "../../layouts/BaseSidebarHeader";
-import { useEffect, useState } from "react";
-import { httpRequest } from "../../../helpers/http-request";
+import { useState } from "react";
 import CardStat from "../../components/CardStat";
 import Button from "../../components/Button";
 import { Link } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import api from "../../../helpers/axios-config";
+import { toast } from "react-toastify";
 
 const columns: ColumnDef<BlogIF>[] = [
   {
@@ -33,23 +35,28 @@ const columns: ColumnDef<BlogIF>[] = [
 ];
 
 export default function Blogs() {
-  const [blogPosts, setBlogPosts] = useState<BlogIF[]>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
   });
 
-  async function fetchData() {
-    const response = await httpRequest({
-      type: "get",
-      url: "/blogs?populate=*&pagination[pageSize]=100",
-    });
-    setBlogPosts(response);
-  }
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const deleteBlog = useMutation({
+    mutationFn: async (id: string) => await api.delete(`/blogs/${id}`),
+    onSuccess: () => {
+      toast.success('Blog is successfully deleted')
+      queryClient.invalidateQueries({queryKey: ['blogPosts']})
+    } 
+  })
+
+  const {data: blogPosts = []} = useQuery<BlogIF[]>({
+    queryKey: ['blogPosts'],
+    queryFn: async () => {
+      const response = await api.get('/blogs?populate=*&pagination[pageSize]=100');
+      return response.data.data;
+    }
+  })
 
   const table = useReactTable({
     data: blogPosts,
@@ -109,6 +116,7 @@ export default function Blogs() {
                       )}
                     </th>
                   ))}
+                  <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">Action</th>
                 </tr>
               ))}
             </thead>
@@ -134,9 +142,12 @@ export default function Blogs() {
                     </>
                   ))}
                   <td>
+                    <div className="flex gap-3">
                     <Link to={`edit-blog/${row.original.documentId}/${row.original.slug}`}>
                       <Button size="xs" buttonType="button">Edit</Button>
                     </Link>
+                      <Button onclick={() => deleteBlog.mutate(row.original.documentId || "1")} size="xs" buttonType="button">Delete</Button>
+                    </div>
                     </td>
                 </tr>
               ))}

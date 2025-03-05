@@ -16,7 +16,7 @@ function Homepage() {
     setLoading(true);
     const response = await httpRequest({
       type: "get",
-      url: "/blogs?populate=*pagination[pageSize]=100",
+      url: "/blogs?populate=*&pagination[pageSize]=100",
     });
     setBlogs(response);
     setLoading(false);

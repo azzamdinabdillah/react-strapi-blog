@@ -18,6 +18,9 @@ export default function Header({ title }: { title: string }) {
       </h3>
       <div className="flex gap-5 items-center">
         <Link to={'/'}>Home</Link>
+        <Link to={"/login"} onClick={() => localStorage.removeItem('tokenJwt')}>
+          Logout
+        </Link>
         <img
           src="/dashboard/icons/settings-header.svg"
           alt=""
