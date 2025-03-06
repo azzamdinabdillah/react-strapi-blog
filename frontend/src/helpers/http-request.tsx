@@ -32,7 +32,11 @@ export async function httpRequest({ type, url, body, config }: HttpRequest) {
 
 export function errorCatchAxios(error: any) {
   if (axios.isAxiosError(error)) {
-    throw error.response?.data.error.message;
+    if (error.response?.data.error.details.errors) {
+      throw error.response?.data.error.details.errors 
+    }else{
+      throw error.response?.data.error.message;
+    }
   } else {
     throw "Unexpected Error : " + error;
   }

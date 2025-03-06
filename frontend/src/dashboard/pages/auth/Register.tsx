@@ -3,12 +3,9 @@ import { FormEvent, useState } from "react";
 import { httpRequest } from "../../../helpers/http-request";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { setToken } from "../../slices/authSlices";
 import { toast } from "react-toastify";
 
 export default function Register() {
-  const dispatch = useDispatch();
   const [inputs, setInputs] = useState<{
     firstname: string;
     lastname: string;
@@ -77,12 +74,25 @@ export default function Register() {
             <form className="gap-8 flex flex-col" onSubmit={handleSubmit}>
               <div className="gap-4 flex flex-col">
                 <p
-                  className={`flex items-center gap-1 text-red-d9 text-xs font-normal ${
-                    !mutation.isError ? "hidden" : ""
-                  }`}
+                  className={`flex gap-1 text-red-d9 text-xs font-normal ${
+                    Array.isArray(mutation.error)
+                      ? "flex-col"
+                      : "flex-row items-center"
+                  } ${!mutation.isError ? "hidden" : ""}`}
                 >
-                  <img src="/dashboard/icons/error-login.svg" alt="" />
-                  {String(mutation.error)}
+                  {Array.isArray(mutation.error) ? (
+                    mutation.error.map((error) => (
+                      <div className="flex flex-row gap-1">
+                        <img src="/dashboard/icons/error-login.svg" alt="" />
+                        {error.message}
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <img src="/dashboard/icons/error-login.svg" alt="" />
+                      {mutation.error}
+                    </>
+                  )}
                 </p>
                 <div className="gap-1.5 flex flex-col">
                   <label

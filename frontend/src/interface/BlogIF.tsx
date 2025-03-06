@@ -22,5 +22,6 @@ export interface CategoryIF {
 }
 
 export interface BlogImage {
+  id: number;
   url: string;
 }

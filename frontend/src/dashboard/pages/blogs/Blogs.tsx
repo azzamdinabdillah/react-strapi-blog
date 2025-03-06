@@ -42,21 +42,30 @@ export default function Blogs() {
 
   const queryClient = useQueryClient();
 
+  const deleteImage = useMutation({
+    mutationFn: async (imageId: number) =>
+      await api.delete(`/upload/files/${imageId}`),
+    onError: () => toast.error("Image failed to delete from server"),
+    onSuccess: () => toast.success("data successfully deleted from server"),
+  });
+
   const deleteBlog = useMutation({
     mutationFn: async (id: string) => await api.delete(`/blogs/${id}`),
     onSuccess: () => {
-      toast.success('Blog is successfully deleted')
-      queryClient.invalidateQueries({queryKey: ['blogPosts']})
-    } 
-  })
+      toast.success("Blog is successfully deleted");
+      queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
+    },
+  });
 
-  const {data: blogPosts = []} = useQuery<BlogIF[]>({
-    queryKey: ['blogPosts'],
+  const { data: blogPosts = [] } = useQuery<BlogIF[]>({
+    queryKey: ["blogPosts"],
     queryFn: async () => {
-      const response = await api.get('/blogs?populate=*&pagination[pageSize]=100');
+      const response = await api.get(
+        "/blogs?populate=*&pagination[pageSize]=100"
+      );
       return response.data.data;
-    }
-  })
+    },
+  });
 
   const table = useReactTable({
     data: blogPosts,
@@ -116,7 +125,9 @@ export default function Blogs() {
                       )}
                     </th>
                   ))}
-                  <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">Action</th>
+                  <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
+                    Action
+                  </th>
                 </tr>
               ))}
             </thead>
@@ -130,25 +141,47 @@ export default function Blogs() {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <>
-                    <td
-                      key={cell.id}
-                      className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
+                      <td
+                        key={cell.id}
+                        className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
                     </>
                   ))}
                   <td>
                     <div className="flex gap-3">
-                    <Link to={`edit-blog/${row.original.documentId}/${row.original.slug}`}>
-                      <Button size="xs" buttonType="button">Edit</Button>
-                    </Link>
-                      <Button onclick={() => deleteBlog.mutate(row.original.documentId || "1")} size="xs" buttonType="button">Delete</Button>
+                      <Link
+                        to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
+                      >
+                        <Button size="xs" buttonType="button">
+                          Edit
+                        </Button>
+                      </Link>
+                      <Button
+                        onclick={async () => {
+                          try {
+                            await deleteImage.mutateAsync(
+                              row.original.image.id
+                            );
+                            await deleteBlog.mutateAsync(
+                              row.original.documentId || "1"
+                            );
+                          } catch (error) {
+                            console.log(error);
+                            toast.error(error as any);
+                          }
+                        }}
+                        size="xs"
+                        buttonType="button"
+                      >
+                        Delete
+                      </Button>
                     </div>
-                    </td>
+                  </td>
                 </tr>
               ))}
             </tbody>

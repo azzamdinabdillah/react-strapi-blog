@@ -15,13 +15,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { RichText } from "../../components/RichText";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
+import api from "../../../helpers/axios-config";
 
 interface InputPostIF {
   title: string;
   author: string;
   description: string;
   category: string;
-  image: number;
+  image: number | { id: number };
   content: any;
 }
 
@@ -42,9 +43,7 @@ export default function FormBlog() {
   });
 
   if (params.id) {
-    const {
-      data: editData
-    } = useQuery({
+    const { data: editData } = useQuery({
       queryKey: ["editData"],
       queryFn: async () => {
         const response = await httpRequest({
@@ -66,7 +65,10 @@ export default function FormBlog() {
           image: editData.image,
           title: editData.title,
         });
+        console.log(inputs);
+        
         setIsEditPage(true);
+        setPreviewImage(import.meta.env.VITE_BE_URL + editData.image.url);
       }
     }, [editData]);
   } else {
@@ -81,10 +83,17 @@ export default function FormBlog() {
       url: "/categories",
     });
     setCategories(response);
+
+    setInputs(
+      produce((draft) => {
+        draft.category = response[1].documentId;
+      })
+    );
   }
 
   function handleImage(e: ChangeEvent<HTMLInputElement>) {
     const image = e.target.files?.[0];
+
     if (image) {
       setImage(image);
       setPreviewImage(URL.createObjectURL(image));
@@ -96,24 +105,34 @@ export default function FormBlog() {
       const formData = new FormData();
       formData.append("files", image || "");
 
-      const response = await httpRequest({
-        type: "post",
-        url: "/upload",
-        body: formData,
-      });
+      if (image !== null) {
+        const response = await httpRequest({
+          type: "post",
+          url: "/upload",
+          body: formData,
+        });
 
-      setInputs(
-        produce((draft) => {
-          draft.image = response[0].id;
-        })
-      );
+        setInputs(
+          produce((draft) => {
+            draft.image = response[0].id;
+          })
+        );
 
-      return response;
+        return response;
+      } else {
+        return false;
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
+      
       toast.success("Image uploaded succesfully");
     },
-    onError: () => toast.success("Image uploaded failed"),
+    onError: (error) => {
+      console.log(error);
+
+      toast.success("Image uploaded failed " + error);
+    },
   });
 
   const mutation = useMutation({
@@ -132,21 +151,56 @@ export default function FormBlog() {
       });
     },
     onSuccess: () => {
-      toast.success(`Data ${isEditPage ? 'Updated' : "Added"} succesfully`);
+      toast.success(`Data ${isEditPage ? "Updated" : "Added"} succesfully`);
     },
     onError: () => toast.success("Data added failed"),
+  });
+
+  const deleteImage = useMutation({
+    mutationFn: async (imageId: number) =>
+      await api.delete(`/upload/files/${imageId}`),
+    onError: () => toast.error("Image failed to delete from server"),
+    onSuccess: () => toast.success("data successfully deleted from server"),
   });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    const imageUpload = await mutationImage.mutateAsync(image);
-    const imageId = imageUpload[0].id;
-    const newInputs = {
-      ...inputs,
-      image: imageId,
-    };
-    await mutation.mutateAsync(newInputs);
+    try {
+      const imageUpload = await mutationImage.mutateAsync(image);
+
+      if (imageUpload) {
+
+        const imageId = imageUpload[0].id;
+
+        const newInputs = {
+          ...inputs,
+          image: imageId,
+        };
+
+        if (isEditPage) {
+          await deleteImage.mutateAsync(
+            typeof inputs.image === "object"
+              ? (inputs.image as { id: number }).id
+              : inputs.image
+          );
+        }
+        await mutation.mutateAsync(newInputs);
+      } else {
+        const newInputs = {
+          ...inputs,
+          image:
+            typeof inputs.image === "object"
+              ? (inputs.image as { id: number }).id
+              : inputs.image,
+        };
+
+        await mutation.mutateAsync(newInputs);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error as any);
+    }
   }
 
   useEffect(() => {

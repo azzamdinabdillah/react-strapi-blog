@@ -12,7 +12,7 @@ export default function Login() {
     identifier: string;
     password: string;
   }>({
-    identifier: "azam@gmail.com",
+    identifier: "adin@gmail.com",
     password: "1234567",
   });
 
@@ -30,7 +30,9 @@ export default function Login() {
       dispatch(setToken(data.jwt));
       navigate("/dashboard");
     },
-    // onError: (data) => {},
+    // onError: (error) => {
+    //   console.log("error mas", error);
+    // },
   });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -62,12 +64,25 @@ export default function Login() {
             <form className="gap-8 flex flex-col" onSubmit={handleSubmit}>
               <div className="gap-4 flex flex-col">
                 <p
-                  className={`flex items-center gap-1 text-red-d9 text-xs font-normal ${
-                    !mutation.isError ? "hidden" : ""
-                  }`}
+                  className={`flex gap-1 text-red-d9 text-xs font-normal ${
+                    Array.isArray(mutation.error)
+                      ? "flex-col"
+                      : "flex-row items-center"
+                  } ${!mutation.isError ? "hidden" : ""}`}
                 >
-                  <img src="/dashboard/icons/error-login.svg" alt="" />
-                  {String(mutation.error)}
+                  {Array.isArray(mutation.error) ? (
+                    mutation.error.map((error) => (
+                      <div className="flex gap-1">
+                        <img src="/dashboard/icons/error-login.svg" alt="" />
+                        {error.message}
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <img src="/dashboard/icons/error-login.svg" alt="" />
+                      {String(mutation.error)}
+                    </>
+                  )}
                 </p>
                 <div className="gap-1.5 flex flex-col">
                   <label
