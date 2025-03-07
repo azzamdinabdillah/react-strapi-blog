@@ -43,6 +43,8 @@ export default function FormBlog() {
   });
 
   if (params.id) {
+    console.log('enek id ne');
+    
     const { data: editData } = useQuery({
       queryKey: ["editData"],
       queryFn: async () => {
@@ -56,7 +58,7 @@ export default function FormBlog() {
     });
 
     useEffect(() => {
-      if (editData) {
+      if (editData && categories.length > 0) {
         setInputs({
           author: editData.author,
           category: editData.category.documentId,
@@ -65,12 +67,11 @@ export default function FormBlog() {
           image: editData.image,
           title: editData.title,
         });
-        console.log(inputs);
         
         setIsEditPage(true);
         setPreviewImage(import.meta.env.VITE_BE_URL + editData.image.url);
       }
-    }, [editData]);
+    }, [editData, categories]);
   } else {
     useEffect(() => {
       setIsEditPage(false);

@@ -14,6 +14,7 @@ import { Link } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../../helpers/axios-config";
 import { toast } from "react-toastify";
+import { LoadingButton } from "../../components/Loading";
 
 const columns: ColumnDef<BlogIF>[] = [
   {
@@ -162,23 +163,33 @@ export default function Blogs() {
                         </Button>
                       </Link>
                       <Button
+                      key={row.original.documentId}
                         onclick={async () => {
-                          try {
-                            await deleteImage.mutateAsync(
-                              row.original.image.id
-                            );
-                            await deleteBlog.mutateAsync(
-                              row.original.documentId || "1"
-                            );
-                          } catch (error) {
-                            console.log(error);
-                            toast.error(error as any);
+                          const conf = confirm("Hapus?");
+                          if (conf) {
+                            try {
+                              // console.log(deleteBlog);
+                              
+                              await deleteImage.mutateAsync(
+                                row.original.image.id
+                              );
+                              await deleteBlog.mutateAsync(
+                                row.original.documentId || "1"
+                              );
+                            } catch (error) {
+                              console.log(error);
+                              toast.error(error as any);
+                            }
                           }
                         }}
                         size="xs"
                         buttonType="button"
                       >
-                        Delete
+                        {deleteImage.isPending || deleteBlog.isPending ? (
+                          <LoadingButton />
+                        ) : (
+                          "Delete"
+                        )}
                       </Button>
                     </div>
                   </td>

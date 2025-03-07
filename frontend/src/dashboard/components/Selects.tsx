@@ -18,11 +18,10 @@ export function Select({
 }) {
   return (
     <div className="relative w-full rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography">
-      <select className="appearance-none w-full h-full py-3 px-4" name="" id="" onChange={onChange}>
+      <select value={selected} className="appearance-none w-full h-full py-3 px-4" name="" id="" onChange={onChange}>
         {option.map((opt, index) => (
           <Fragment key={index}>
             <option
-              selected={opt.value === selected ? true : false}
               value={opt.value}
             >
               {opt.text}
@@ -38,20 +37,3 @@ export function Select({
     </div>
   );
 }
-
-// export function SelectGroup({
-//   label,
-//   option,
-//   selected,
-// }: {
-//   label: string;
-//   option: SelectIF[];
-//   selected: string;
-// }) {
-//   return (
-//     <div className="flex flex-col gap-[9px]">
-//       <Label label={label} />
-//       <Select onChange={option.on} option={option} selected={selected} />
-//     </div>
-//   );
-// }

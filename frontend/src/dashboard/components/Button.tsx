@@ -18,8 +18,8 @@ export default function Button({
   disabled = false,
 }: ButtonComponentIF) {
   const sizeClasses: Record<typeof size, string> = {
-    xs: "px-[15px] py-[5px] xl:py-2 xl:px-5",
-    md: "px-[26px] py-[5px] xl:py-3.5 xl:px-10",
+    xs: "px-[15px] py-[5px] md:py-1.5 xl:py-2 xl:px-5",
+    md: "px-[26px] py-[5px] md:py-2 xl:py-3.5 xl:px-10",
   };
   return (
     <button
