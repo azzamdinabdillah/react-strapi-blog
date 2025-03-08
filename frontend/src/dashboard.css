@@ -37,7 +37,7 @@
   margin: auto;
 }
 
-.rsw-btn[data-active="true"]{
+.rsw-btn[data-active="true"] {
   background-color: #343c6a !important;
   color: white;
   border-radius: 5px;
@@ -60,6 +60,10 @@
 .rsw-ce ol {
   list-style: decimal;
   padding-left: 2em;
+}
+
+.Toastify__toast {
+  text-transform: capitalize !important;
 }
 
 @media (min-width: 768px) {

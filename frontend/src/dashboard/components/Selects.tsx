@@ -10,15 +10,18 @@ export interface SelectIF {
 export function Select({
   option,
   selected,
-  onChange
+  onChange,
+  placeholder
 }: {
   option: SelectIF[];
   selected?: string;
   onChange: ChangeEventHandler<HTMLSelectElement>
+  placeholder?: string
 }) {
   return (
     <div className="relative w-full rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography">
-      <select value={selected} className="appearance-none w-full h-full py-3 px-4" name="" id="" onChange={onChange}>
+      <select value={selected || ""} className="appearance-none w-full h-full py-3 px-4" name="" id="" onChange={onChange}>
+        <option value="">{placeholder}</option>
         {option.map((opt, index) => (
           <Fragment key={index}>
             <option

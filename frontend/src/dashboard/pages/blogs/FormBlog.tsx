@@ -22,7 +22,7 @@ interface InputPostIF {
   author: string;
   description: string;
   category: string;
-  image: number | { id: number };
+  image: number | { id: number } | null;
   content: any;
 }
 
@@ -33,18 +33,21 @@ export default function FormBlog() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryIF[]>([]);
   const [inputs, setInputs] = useState<InputPostIF>({
-    author: "Azam Din Abdillah",
-    category: "dzwqgmvm4sy98oaaldzt7mv1",
-    // category: "xy46jis1ufhncvhlmk170lc9",
-    content: "<h1>halo</h1>",
-    description: "dan ini adalah deskripsi",
-    image: 0,
-    title: "Cara Ngoding JavaScript",
+    author: "",
+    category: "",
+    content: "",
+    description: "",
+    image: null,
+    title: "",
+    // author: "Azam Din Abdillah",
+    // category: "dzwqgmvm4sy98oaaldzt7mv1",
+    // content: "<h1>halo</h1>",
+    // description: "dan ini adalah deskripsi",
+    // image: 0,
+    // title: "Cara Ngoding JavaScript",
   });
 
   if (params.id) {
-    console.log('enek id ne');
-    
     const { data: editData } = useQuery({
       queryKey: ["editData"],
       queryFn: async () => {
@@ -67,7 +70,7 @@ export default function FormBlog() {
           image: editData.image,
           title: editData.title,
         });
-        
+
         setIsEditPage(true);
         setPreviewImage(import.meta.env.VITE_BE_URL + editData.image.url);
       }
@@ -84,12 +87,6 @@ export default function FormBlog() {
       url: "/categories",
     });
     setCategories(response);
-
-    setInputs(
-      produce((draft) => {
-        draft.category = response[1].documentId;
-      })
-    );
   }
 
   function handleImage(e: ChangeEvent<HTMLInputElement>) {
@@ -106,33 +103,29 @@ export default function FormBlog() {
       const formData = new FormData();
       formData.append("files", image || "");
 
-      if (image !== null) {
-        const response = await httpRequest({
-          type: "post",
-          url: "/upload",
-          body: formData,
-        });
+      const response = await httpRequest({
+        type: "post",
+        url: "/upload",
+        body: formData,
+      });
 
-        setInputs(
-          produce((draft) => {
-            draft.image = response[0].id;
-          })
-        );
+      setInputs(
+        produce((draft) => {
+          draft.image = response[0].id;
+        })
+      );
 
-        return response;
-      } else {
-        return false;
-      }
+      return response;
     },
     onSuccess: (data) => {
-      console.log(data);
-      
-      toast.success("Image uploaded succesfully");
+      if (data === false) {
+        toast.error("Image uploaded failed");
+      } else {
+        toast.success("Image uploaded succesfully");
+      }
     },
     onError: (error) => {
-      console.log(error);
-
-      toast.success("Image uploaded failed " + error);
+      toast.error("Image uploaded failed " + error);
     },
   });
 
@@ -154,24 +147,24 @@ export default function FormBlog() {
     onSuccess: () => {
       toast.success(`Data ${isEditPage ? "Updated" : "Added"} succesfully`);
     },
-    onError: () => toast.success("Data added failed"),
+    onError: (e) => {
+      toast.error("Data added failed : " + e);
+    },
   });
 
   const deleteImage = useMutation({
     mutationFn: async (imageId: number) =>
       await api.delete(`/upload/files/${imageId}`),
     onError: () => toast.error("Image failed to delete from server"),
-    onSuccess: () => toast.success("data successfully deleted from server"),
+    onSuccess: () => toast.success("Image successfully deleted from server"),
   });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     try {
-      const imageUpload = await mutationImage.mutateAsync(image);
-
-      if (imageUpload) {
-
+      if (!isEditPage) {
+        const imageUpload = await mutationImage.mutateAsync(image);
         const imageId = imageUpload[0].id;
 
         const newInputs = {
@@ -179,27 +172,36 @@ export default function FormBlog() {
           image: imageId,
         };
 
-        if (isEditPage) {
+        await mutation.mutateAsync(newInputs);
+      } else {
+        if (image !== null) {
+          const imageUpload = await mutationImage.mutateAsync(image);
+          const imageId = imageUpload[0].id;
+
           await deleteImage.mutateAsync(
             typeof inputs.image === "object"
               ? (inputs.image as { id: number }).id
               : inputs.image
           );
-        }
-        await mutation.mutateAsync(newInputs);
-      } else {
-        const newInputs = {
-          ...inputs,
-          image:
-            typeof inputs.image === "object"
-              ? (inputs.image as { id: number }).id
-              : inputs.image,
-        };
 
-        await mutation.mutateAsync(newInputs);
+          const newInputs = {
+            ...inputs,
+            image: imageId,
+          };
+          await mutation.mutateAsync(newInputs);
+        } else {
+          const newInputs = {
+            ...inputs,
+            image:
+              typeof inputs.image === "object"
+                ? (inputs.image as { id: number }).id
+                : inputs.image,
+          };
+
+          await mutation.mutateAsync(newInputs);
+        }
       }
     } catch (error) {
-      console.log(error);
       toast.error(error as any);
     }
   }
@@ -253,6 +255,7 @@ export default function FormBlog() {
           <div className="flex flex-col gap-[9px]">
             <Label label="Category" />
             <Select
+              placeholder="Choose category"
               onChange={(e) =>
                 setInputs(
                   produce((draft) => {

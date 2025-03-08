@@ -33,6 +33,20 @@ const columns: ColumnDef<BlogIF>[] = [
     accessorKey: "author",
     header: "Author",
   },
+  {
+    header: "Tumbnail",
+    cell: ({ row }) => {
+      return (
+        <>
+          <img
+            className="w-20 h-20 object-cover rounded"
+            src={import.meta.env.VITE_BE_URL + row.original.image.url}
+            alt=""
+          />
+        </>
+      );
+    },
+  },
 ];
 
 export default function Blogs() {
@@ -163,13 +177,13 @@ export default function Blogs() {
                         </Button>
                       </Link>
                       <Button
-                      key={row.original.documentId}
+                        key={row.original.documentId}
                         onclick={async () => {
                           const conf = confirm("Hapus?");
                           if (conf) {
                             try {
                               // console.log(deleteBlog);
-                              
+
                               await deleteImage.mutateAsync(
                                 row.original.image.id
                               );
