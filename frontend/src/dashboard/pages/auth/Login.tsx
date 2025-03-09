@@ -30,9 +30,6 @@ export default function Login() {
       dispatch(setToken(data.jwt));
       navigate("/dashboard");
     },
-    // onError: (error) => {
-    //   console.log("error mas", error);
-    // },
   });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {

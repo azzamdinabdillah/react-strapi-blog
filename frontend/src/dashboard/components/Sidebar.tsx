@@ -162,7 +162,7 @@ function SidebarMenu() {
           >
             {({ isActive }) => (
               <>
-                <div className="w-5 h-5 xl:w-[25px] xl:h-[25px]">
+                <div className={`w-5 h-5 xl:w-[25px] xl:h-[25px] ${isActive ? 'active-svg' : 'inactive-svg'}`}>
                   {menu.svg}
                 </div>
                 <p

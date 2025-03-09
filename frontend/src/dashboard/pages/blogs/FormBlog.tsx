@@ -16,6 +16,7 @@ import { RichText } from "../../components/RichText";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import api from "../../../helpers/axios-config";
+import { LoadingSvg } from "../../components/Loading";
 
 interface InputPostIF {
   title: string;
@@ -32,6 +33,7 @@ export default function FormBlog() {
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryIF[]>([]);
+  const [editDataIsLoading, setEditDataIsLoading] = useState(false);
   const [inputs, setInputs] = useState<InputPostIF>({
     author: "",
     category: "",
@@ -39,23 +41,19 @@ export default function FormBlog() {
     description: "",
     image: null,
     title: "",
-    // author: "Azam Din Abdillah",
-    // category: "dzwqgmvm4sy98oaaldzt7mv1",
-    // content: "<h1>halo</h1>",
-    // description: "dan ini adalah deskripsi",
-    // image: 0,
-    // title: "Cara Ngoding JavaScript",
   });
 
   if (params.id) {
     const { data: editData } = useQuery({
       queryKey: ["editData"],
       queryFn: async () => {
+        setEditDataIsLoading(true);
         const response = await httpRequest({
           type: "get",
           url: `/blogs/${params.id}?populate=*`,
         });
 
+        setEditDataIsLoading(false);
         return response;
       },
     });
@@ -71,6 +69,7 @@ export default function FormBlog() {
           title: editData.title,
         });
 
+        setEditDataIsLoading(false);
         setIsEditPage(true);
         setPreviewImage(import.meta.env.VITE_BE_URL + editData.image.url);
       }
@@ -117,16 +116,6 @@ export default function FormBlog() {
 
       return response;
     },
-    // onSuccess: (data) => {
-    //   if (data === false) {
-    //     toast.error("Image uploaded failed");
-    //   } else {
-    //     toast.success("Image uploaded succesfully");
-    //   }
-    // },
-    // onError: (error) => {
-    //   toast.error("Image uploaded failed " + error);
-    // },
   });
 
   const mutation = useMutation({
@@ -144,28 +133,11 @@ export default function FormBlog() {
         },
       });
     },
-    // onSuccess: () => {
-    //   toast.success(`Data ${isEditPage ? "Updated" : "Added"} succesfully`);
-    // },
-    // onError: (errors: Array<any>) => {
-    //   toast.error(
-    //     <div className="">
-    //       Error : <br />
-    //       <ul className="pl-5">
-    //         {errors.map((e) => (
-    //           <li className="list-decimal">{e.message}</li>
-    //         ))}
-    //       </ul>
-    //     </div>
-    //   );
-    // },
   });
 
   const deleteImage = useMutation({
     mutationFn: async (imageId: number) =>
       await api.delete(`/upload/files/${imageId}`),
-    // onError: () => toast.error("Image failed to delete from server"),
-    // onSuccess: () => toast.success("Image successfully deleted from server"),
   });
 
   async function handleSubmit(e: FormEvent) {
@@ -216,8 +188,6 @@ export default function FormBlog() {
         }
       }
     } catch (errors: any) {
-      console.log(errors);
-
       if (imageId) {
         deleteImage.mutate(imageId);
       }
@@ -249,130 +219,143 @@ export default function FormBlog() {
       title={`Blog / ${isEditPage ? "Edit Blog" : "Add Blog"}`}
     >
       <div className="py-5.5 px-5 bg-white rounded-2xl">
-        <form className="gap-4 flex flex-col" onSubmit={handleSubmit}>
-          <InputTextGroup
-            placeholder="Charlene Reed"
-            label="Title"
-            value={inputs.title}
-            onChangeInput={(e) =>
-              setInputs(
-                produce((draft) => {
-                  draft.title = e.target.value;
-                })
-              )
-            }
-          />
-          <InputTextGroup
-            placeholder="Azam Din Abdillah"
-            label="Author"
-            value={inputs.author}
-            onChangeInput={(e) =>
-              setInputs(
-                produce((draft) => {
-                  draft.author = e.target.value;
-                })
-              )
-            }
-          />
-          <InputTextAreaGroup
-            placeholder="Write your description here...."
-            label="Description"
-            value={inputs.description}
-            onChangeTextarea={(e) =>
-              setInputs(
-                produce((draft) => {
-                  draft.description = e.target.value;
-                })
-              )
-            }
-          />
-          <div className="flex flex-col gap-[9px]">
-            <Label label="Category" />
-            <Select
-              placeholder="Choose category"
-              onChange={(e) =>
+        {editDataIsLoading ? (
+          <div className="flex gap-2 items-center">
+            <p>Loading Data</p>
+            <LoadingSvg color="text-[#1814f3]" />
+          </div>
+        ) : (
+          <form className="gap-4 flex flex-col" onSubmit={handleSubmit}>
+            <InputTextGroup
+              placeholder="Charlene Reed"
+              label="Title"
+              value={inputs.title}
+              onChangeInput={(e) =>
                 setInputs(
                   produce((draft) => {
-                    draft.category = e.target.value;
+                    draft.title = e.target.value;
                   })
                 )
               }
-              selected={inputs.category}
-              option={categories.map((cat) => ({
-                label: "Category",
-                text: cat.name,
-                value: cat.documentId || "",
-              }))}
             />
-          </div>
-          <div className="flex flex-col gap-2">
+            <InputTextGroup
+              placeholder="Azam Din Abdillah"
+              label="Author"
+              value={inputs.author}
+              onChangeInput={(e) =>
+                setInputs(
+                  produce((draft) => {
+                    draft.author = e.target.value;
+                  })
+                )
+              }
+            />
+            <InputTextAreaGroup
+              placeholder="Write your description here...."
+              label="Description"
+              value={inputs.description}
+              onChangeTextarea={(e) =>
+                setInputs(
+                  produce((draft) => {
+                    draft.description = e.target.value;
+                  })
+                )
+              }
+            />
             <div className="flex flex-col gap-[9px]">
-              <Label label="Thumbnail" note={isEditPage && "( if you don't want to change the image, just let it go )"} />
-              <InputImage
-                placeholder="Put your image here"
-                onChangeInput={handleImage}
+              <Label label="Category" />
+              <Select
+                placeholder="Choose category"
+                onChange={(e) =>
+                  setInputs(
+                    produce((draft) => {
+                      draft.category = e.target.value;
+                    })
+                  )
+                }
+                selected={inputs.category}
+                option={categories.map((cat) => ({
+                  label: "Category",
+                  text: cat.name,
+                  value: cat.documentId || "",
+                }))}
               />
             </div>
-            {previewImage ? (
-              <img
-                src={previewImage}
-                alt=""
-                className="w-full h-[400px] object-cover rounded"
-              />
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="flex flex-col gap-[9px]">
-            <Label label="Content" />
-            <RichText
-              value={inputs.content}
-              onChange={(e) =>
-                setInputs(
-                  produce((draft) => {
-                    draft.content = e.target.value;
-                  })
-                )
-              }
-            />
-          </div>
-
-          <Button
-            disabled={
-              mutation.isPending || mutationImage.isPending ? true : false
-            }
-            buttonType="submit"
-            customClassName="w-fit"
-          >
-            {mutation.isPending || mutationImage.isPending ? (
-              <div className="flex items-center justify-center gap-2">
-                Loading
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx={12}
-                    cy={12}
-                    r={10}
-                    stroke="currentColor"
-                    strokeWidth={4}
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-[9px]">
+                <Label
+                  label="Thumbnail"
+                  note={
+                    isEditPage &&
+                    "( if you don't want to change the image, just let it go )"
+                  }
+                />
+                <InputImage
+                  placeholder="Put your image here"
+                  onChangeInput={handleImage}
+                />
               </div>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </form>
+              {previewImage ? (
+                <img
+                  src={previewImage}
+                  alt=""
+                  className="w-full h-[400px] object-cover rounded"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="flex flex-col gap-[9px]">
+              <Label label="Content" />
+              <RichText
+                value={inputs.content}
+                onChange={(e) =>
+                  setInputs(
+                    produce((draft) => {
+                      draft.content = e.target.value;
+                    })
+                  )
+                }
+              />
+            </div>
+
+            <Button
+              disabled={
+                mutation.isPending || mutationImage.isPending ? true : false
+              }
+              buttonType="submit"
+              customClassName="w-fit"
+            >
+              {mutation.isPending || mutationImage.isPending ? (
+                <div className="flex items-center justify-center gap-2">
+                  Loading
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx={12}
+                      cy={12}
+                      r={10}
+                      stroke="currentColor"
+                      strokeWidth={4}
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </form>
+        )}
       </div>
     </BaseSidebarHeader>
   );

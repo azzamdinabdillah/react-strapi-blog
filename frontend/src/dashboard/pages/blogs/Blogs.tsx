@@ -14,7 +14,7 @@ import { Link } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../../helpers/axios-config";
 import { toast } from "react-toastify";
-import { LoadingButton } from "../../components/Loading";
+import { LoadingSvg } from "../../components/Loading";
 
 const columns: ColumnDef<BlogIF>[] = [
   {
@@ -57,22 +57,40 @@ export default function Blogs() {
 
   const queryClient = useQueryClient();
 
+  async function handleDelete(row: BlogIF) {
+    const conf = confirm("Hapus?");
+    if (conf) {
+      try {
+        toast.promise(
+          async () => {
+            await deleteImage.mutateAsync(row.image.id);
+            await deleteBlog.mutateAsync(row.documentId || "1");
+          },
+          {
+            pending: "Loading...",
+            success: "Blog is successfully deleted",
+            error: "blog is failed to delete",
+          }
+        );
+      } catch (error) {
+        toast.error(error as any);
+      }
+    }
+  }
+
   const deleteImage = useMutation({
     mutationFn: async (imageId: number) =>
       await api.delete(`/upload/files/${imageId}`),
-    onError: () => toast.error("Image failed to delete from server"),
-    onSuccess: () => toast.success("data successfully deleted from server"),
   });
 
   const deleteBlog = useMutation({
     mutationFn: async (id: string) => await api.delete(`/blogs/${id}`),
     onSuccess: () => {
-      toast.success("Blog is successfully deleted");
       queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
     },
   });
 
-  const { data: blogPosts = [] } = useQuery<BlogIF[]>({
+  const { data: blogPosts = [], isPending } = useQuery<BlogIF[]>({
     queryKey: ["blogPosts"],
     queryFn: async () => {
       const response = await api.get(
@@ -125,92 +143,83 @@ export default function Blogs() {
 
       <div className="py-[17px] md:py-[22px] pb-[2px] px-5 bg-white rounded-2xl xl:px-[30px]">
         <div className="overflow-auto">
-          <table className="w-full overflow-auto">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="border-b border-gray-e6">
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base"
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
-                  ))}
-                  <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
-                    Action
-                  </th>
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row, index) => (
-                <tr
-                  key={row.id}
-                  className={`${
-                    index !== blogPosts.length - 1 ? "border-b" : ""
-                  } border-gray-f2`}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <>
-                      <td
-                        key={cell.id}
-                        className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
+          {isPending ? (
+            <div className="flex gap-2 items-center">
+              <p>Wait For The Table</p>
+              <LoadingSvg color="text-[#1814f3]" />
+            </div>
+          ) : (
+            <table className="w-full overflow-auto">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id} className="border-b border-gray-e6">
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        key={header.id}
+                        className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base"
                       >
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                          header.column.columnDef.header,
+                          header.getContext()
                         )}
-                      </td>
-                    </>
-                  ))}
-                  <td>
-                    <div className="flex gap-3">
-                      <Link
-                        to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
-                      >
-                        <Button size="xs" buttonType="button">
-                          Edit
-                        </Button>
-                      </Link>
-                      <Button
-                        key={row.original.documentId}
-                        onclick={async () => {
-                          const conf = confirm("Hapus?");
-                          if (conf) {
-                            try {
-                              // console.log(deleteBlog);
-
-                              await deleteImage.mutateAsync(
-                                row.original.image.id
-                              );
-                              await deleteBlog.mutateAsync(
-                                row.original.documentId || "1"
-                              );
-                            } catch (error) {
-                              console.log(error);
-                              toast.error(error as any);
-                            }
+                      </th>
+                    ))}
+                    <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
+                      Action
+                    </th>
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row, index) => (
+                  <tr
+                    key={row.id}
+                    className={`${
+                      index !== blogPosts.length - 1 ? "border-b" : ""
+                    } border-gray-f2`}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <>
+                        <td
+                          key={cell.id}
+                          className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      </>
+                    ))}
+                    <td>
+                      <div className="flex gap-3">
+                        <Link
+                          to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
+                        >
+                          <Button size="xs" buttonType="button">
+                            Edit
+                          </Button>
+                        </Link>
+                        <Button
+                          key={row.original.documentId}
+                          onclick={() => handleDelete(row.original)}
+                          size="xs"
+                          buttonType="button"
+                          disabled={
+                            deleteImage.isPending || deleteBlog.isPending
+                              ? true
+                              : false
                           }
-                        }}
-                        size="xs"
-                        buttonType="button"
-                      >
-                        {deleteImage.isPending || deleteBlog.isPending ? (
-                          <LoadingButton />
-                        ) : (
-                          "Delete"
-                        )}
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
