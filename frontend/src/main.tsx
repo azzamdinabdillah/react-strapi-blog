@@ -39,6 +39,7 @@ function ProtectedRoute() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ToastContainer
+      icon={false}
       position="top-right"
       autoClose={5000}
       hideProgressBar={false}

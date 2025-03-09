@@ -117,16 +117,16 @@ export default function FormBlog() {
 
       return response;
     },
-    onSuccess: (data) => {
-      if (data === false) {
-        toast.error("Image uploaded failed");
-      } else {
-        toast.success("Image uploaded succesfully");
-      }
-    },
-    onError: (error) => {
-      toast.error("Image uploaded failed " + error);
-    },
+    // onSuccess: (data) => {
+    //   if (data === false) {
+    //     toast.error("Image uploaded failed");
+    //   } else {
+    //     toast.success("Image uploaded succesfully");
+    //   }
+    // },
+    // onError: (error) => {
+    //   toast.error("Image uploaded failed " + error);
+    // },
   });
 
   const mutation = useMutation({
@@ -144,28 +144,38 @@ export default function FormBlog() {
         },
       });
     },
-    onSuccess: () => {
-      toast.success(`Data ${isEditPage ? "Updated" : "Added"} succesfully`);
-    },
-    onError: (e) => {
-      toast.error("Data added failed : " + e);
-    },
+    // onSuccess: () => {
+    //   toast.success(`Data ${isEditPage ? "Updated" : "Added"} succesfully`);
+    // },
+    // onError: (errors: Array<any>) => {
+    //   toast.error(
+    //     <div className="">
+    //       Error : <br />
+    //       <ul className="pl-5">
+    //         {errors.map((e) => (
+    //           <li className="list-decimal">{e.message}</li>
+    //         ))}
+    //       </ul>
+    //     </div>
+    //   );
+    // },
   });
 
   const deleteImage = useMutation({
     mutationFn: async (imageId: number) =>
       await api.delete(`/upload/files/${imageId}`),
-    onError: () => toast.error("Image failed to delete from server"),
-    onSuccess: () => toast.success("Image successfully deleted from server"),
+    // onError: () => toast.error("Image failed to delete from server"),
+    // onSuccess: () => toast.success("Image successfully deleted from server"),
   });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    let imageId;
 
     try {
       if (!isEditPage) {
         const imageUpload = await mutationImage.mutateAsync(image);
-        const imageId = imageUpload[0].id;
+        imageId = imageUpload[0].id;
 
         const newInputs = {
           ...inputs,
@@ -173,6 +183,8 @@ export default function FormBlog() {
         };
 
         await mutation.mutateAsync(newInputs);
+
+        toast.success("Blog added successfully");
       } else {
         if (image !== null) {
           const imageUpload = await mutationImage.mutateAsync(image);
@@ -199,10 +211,32 @@ export default function FormBlog() {
           };
 
           await mutation.mutateAsync(newInputs);
+
+          toast.success("Blog updated successfully");
         }
       }
-    } catch (error) {
-      toast.error(error as any);
+    } catch (errors: any) {
+      console.log(errors);
+
+      if (imageId) {
+        deleteImage.mutate(imageId);
+      }
+      toast.error(
+        Array.isArray(errors) ? (
+          <div className="">
+            Error : <br />
+            <ul className="pl-5">
+              {errors.map((e: any, index: number) => (
+                <li className="list-decimal" key={index}>
+                  {e.message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          "Error : " + errors
+        )
+      );
     }
   }
 
@@ -273,7 +307,7 @@ export default function FormBlog() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-[9px]">
-              <Label label="Thumbnail" />
+              <Label label="Thumbnail" note={isEditPage && "( if you don't want to change the image, just let it go )"} />
               <InputImage
                 placeholder="Put your image here"
                 onChangeInput={handleImage}

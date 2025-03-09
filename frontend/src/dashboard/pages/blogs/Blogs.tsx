@@ -76,7 +76,7 @@ export default function Blogs() {
     queryKey: ["blogPosts"],
     queryFn: async () => {
       const response = await api.get(
-        "/blogs?populate=*&pagination[pageSize]=100"
+        "/blogs?populate=*&pagination[pageSize]=100&sort=createdAt:desc"
       );
       return response.data.data;
     },
