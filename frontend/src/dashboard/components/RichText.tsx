@@ -7,5 +7,5 @@ export function RichText({
   value: string;
   onChange: (event: ContentEditableEvent) => void;
 }) {
-  return <Editor value={value} onChange={onChange} />;
+  return <Editor value={value} onChange={onChange} className="editor" />;
 }

@@ -10,7 +10,7 @@ export function Label({
   return (
     <label
       htmlFor=""
-      className="text-[13px] text-black-23 flex gap-2 items-center"
+      className="text-[13px] text-black-23 flex gap-2 items-center flex-wrap"
     >
       {label}
       <span className="text-black-23/50">{note}</span>

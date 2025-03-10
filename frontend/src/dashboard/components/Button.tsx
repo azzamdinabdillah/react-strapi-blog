@@ -19,7 +19,7 @@ export default function Button({
 }: ButtonComponentIF) {
   const sizeClasses: Record<typeof size, string> = {
     xs: "px-[15px] py-[5px] md:py-1.5 xl:py-2 xl:px-5",
-    md: "px-[26px] py-[5px] md:py-2 xl:py-3.5 xl:px-10",
+    md: "px-[26px] py-[10px] md:py-2 xl:py-3.5 xl:px-10",
   };
   return (
     <button

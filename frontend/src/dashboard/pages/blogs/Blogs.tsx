@@ -16,39 +16,6 @@ import api from "../../../helpers/axios-config";
 import { toast } from "react-toastify";
 import { LoadingSvg } from "../../components/Loading";
 
-const columns: ColumnDef<BlogIF>[] = [
-  {
-    accessorKey: "title",
-    header: "Title",
-  },
-  {
-    accessorKey: "category.name",
-    header: "Category",
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
-  },
-  {
-    header: "Tumbnail",
-    cell: ({ row }) => {
-      return (
-        <>
-          <img
-            className="w-20 h-20 object-cover rounded"
-            src={import.meta.env.VITE_BE_URL + row.original.image.url}
-            alt=""
-          />
-        </>
-      );
-    },
-  },
-];
-
 export default function Blogs() {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -56,6 +23,66 @@ export default function Blogs() {
   });
 
   const queryClient = useQueryClient();
+
+  const columns: ColumnDef<BlogIF>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+    },
+    {
+      accessorKey: "category.name",
+      header: "Category",
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
+      accessorKey: "author",
+      header: "Author",
+    },
+    {
+      header: "Tumbnail",
+      cell: ({ row }) => {
+        return (
+          <div className="w-full">
+            <img
+              className="w-32 h-7 xl:w-20 xl:h-20 object-cover rounded"
+              src={import.meta.env.VITE_BE_URL + row.original.image.url}
+              alt=""
+            />
+          </div>
+        );
+      },
+    },
+    {
+      header: "Action",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-3">
+            <Link
+              to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
+            >
+              <Button size="xs" buttonType="button">
+                Edit
+              </Button>
+            </Link>
+            <Button
+              key={row.original.documentId}
+              onclick={() => handleDelete(row.original)}
+              size="xs"
+              buttonType="button"
+              disabled={
+                deleteImage.isPending || deleteBlog.isPending ? true : false
+              }
+            >
+              Delete
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
 
   async function handleDelete(row: BlogIF) {
     const conf = confirm("Hapus?");
@@ -156,7 +183,7 @@ export default function Blogs() {
                     {headerGroup.headers.map((header) => (
                       <th
                         key={header.id}
-                        className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base"
+                        className="text-blue-71 text-xs font-medium pb-[7px] pr-4 text-start xl:text-base"
                       >
                         {flexRender(
                           header.column.columnDef.header,
@@ -164,9 +191,9 @@ export default function Blogs() {
                         )}
                       </th>
                     ))}
-                    <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
+                    {/* <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
                       Action
-                    </th>
+                    </th> */}
                   </tr>
                 ))}
               </thead>
@@ -191,7 +218,7 @@ export default function Blogs() {
                         </td>
                       </>
                     ))}
-                    <td>
+                    {/* <td>
                       <div className="flex gap-3">
                         <Link
                           to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
@@ -214,7 +241,7 @@ export default function Blogs() {
                           Delete
                         </Button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

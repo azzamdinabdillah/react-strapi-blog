@@ -138,12 +138,15 @@ const sidebarMenu: {
 ];
 
 function SidebarMenu() {
+  const dispatch = useDispatch();
+
   return (
     <div className="flex flex-col gap-9 mt-12 xl:gap-10">
       {sidebarMenu.map((menu, index) => (
         <React.Fragment key={index}>
           <NavLink
             onClick={() => {
+              dispatch(close());
               if (menu.title === "Logout") {
                 localStorage.removeItem("tokenJwt");
               } else {
@@ -162,7 +165,11 @@ function SidebarMenu() {
           >
             {({ isActive }) => (
               <>
-                <div className={`w-5 h-5 xl:w-[25px] xl:h-[25px] ${isActive ? 'active-svg' : 'inactive-svg'}`}>
+                <div
+                  className={`w-5 h-5 xl:w-[25px] xl:h-[25px] ${
+                    isActive ? "active-svg" : "inactive-svg"
+                  }`}
+                >
                   {menu.svg}
                 </div>
                 <p

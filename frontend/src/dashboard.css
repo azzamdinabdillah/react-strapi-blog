@@ -29,7 +29,7 @@
 
 .rsw-editor {
   border: 1px solid #dfeaf2 !important;
-  min-height: 200px !important;
+  min-height: 400px !important;
 }
 
 .rsw-toolbar {
@@ -37,11 +37,12 @@
   border-bottom: 1px solid #dfeaf2 !important;
   flex-wrap: wrap;
   gap: 5px;
+  padding: 5px;
 }
 
 .rsw-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   margin: auto;
 }
 
@@ -54,6 +55,17 @@
 .rsw-btn span,
 .rsw-toolbar select {
   font-size: 15px;
+}
+
+.rsw-btn{
+  /* font-size: 10px !important; */
+  margin: 3px !important;
+}
+
+.rsw-dd{
+  font-size: 13px !important;
+  height: 32px;
+  padding: 0 7px;
 }
 
 .rsw-separator {
@@ -69,6 +81,16 @@
   list-style: decimal;
   padding-left: 2em;
 }
+
+/* .editor:focus {
+  border: 2px solid #343c6a;
+}
+
+.editor {
+  outline: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+} */
 
 .Toastify__toast {
   text-transform: capitalize !important;
@@ -103,6 +125,10 @@
 
 .input-style {
   @apply w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71;
+}
+
+.focus-input{
+  @apply focus:border-2 focus:border-[#343c6a] transition outline-0;
 }
 
 ::-webkit-scrollbar {

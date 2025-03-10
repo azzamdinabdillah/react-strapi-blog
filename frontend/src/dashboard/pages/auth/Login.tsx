@@ -139,7 +139,7 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center">
+                {/* <div className="flex justify-between items-center">
                   <div className="flex gap-1.5 items-center">
                     <input
                       type="checkbox"
@@ -152,7 +152,7 @@ export default function Login() {
                   <p className="text-sm font-medium text-primary-1">
                     Forgot Password
                   </p>
-                </div>
+                </div> */}
               </div>
 
               <div className="">

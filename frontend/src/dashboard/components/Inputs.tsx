@@ -16,7 +16,7 @@ export function InputText({ placeholder, onChangeInput, value }: InputIF) {
       type="text"
       value={value || ""}
       onChange={onChangeInput}
-      className="w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
+      className="focus-input w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
     />
   );
 }
@@ -28,7 +28,7 @@ export function InputImage({ placeholder, onChangeInput }: InputIF) {
       accept="image/*"
       placeholder={placeholder}
       type="file"
-      className="w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
+      className="focus-input w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
     />
   );
 }
@@ -43,7 +43,7 @@ export function InputTextArea({
       onChange={onChangeTextarea}
       value={value || ""}
       placeholder={placeholder}
-      className="w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
+      className="focus-input w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
       rows={5}
     ></textarea>
   );
