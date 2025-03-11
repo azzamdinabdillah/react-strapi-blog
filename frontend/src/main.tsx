@@ -19,6 +19,7 @@ import FormBlog from "./dashboard/pages/blogs/FormBlog";
 import { ToastContainer, Bounce } from "react-toastify";
 import Register from "./dashboard/pages/auth/Register";
 import Categories from "./dashboard/pages/categories/Categories";
+import FormCategory from "./dashboard/pages/categories/FormCategory";
 
 const store = configureStore({
   reducer: {
@@ -79,6 +80,7 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="categories">
                 <Route index element={<Categories />} />
+                <Route path="add-category" element={<FormCategory />} />
               </Route>
             </Route>
           </Routes>

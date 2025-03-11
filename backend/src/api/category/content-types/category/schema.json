@@ -15,7 +15,8 @@
     "name": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": true,
+      "minLength": 2
     },
     "slug": {
       "type": "uid",

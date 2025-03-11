@@ -9,12 +9,13 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect } from "react";
 import { Link } from "react-router";
 import Button from "../../components/Button";
+import { formatDate } from "../../../helpers/format-date";
+import { LoadingSvg } from "../../components/Loading";
 
 function Categories() {
-  const { data: dataCategories = [] } = useQuery<CategoryIF[]>({
+  const { data: dataCategories = [], isPending } = useQuery<CategoryIF[]>({
     queryKey: ["categories"],
     queryFn: async () => {
       const response = await api.get(
@@ -30,8 +31,11 @@ function Categories() {
       header: "Category Name",
     },
     {
-      accessorKey: "slug",
-      header: "slug",
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: ({ row }) => {
+        return formatDate(row.original.createdAt ?? "");
+      },
     },
   ];
 
@@ -40,10 +44,6 @@ function Categories() {
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  //   useEffect(() => {
-  //     console.log(table.getRowModel());
-  //   }, [dataCategories]);
 
   return (
     <BaseSidebarHeader title="Category">
@@ -57,52 +57,69 @@ function Categories() {
 
       <div className="flex items-center justify-between divider-section">
         <h5 className="section-title">Category List</h5>
-        <Link to={"/dashboard/blogs/add-blog"}>
+        <Link to={"/dashboard/categories/add-category"}>
           <Button buttonType="button">Add Category</Button>
         </Link>
       </div>
 
       <div className="py-[17px] md:py-[22px] pb-[2px] px-5 bg-white rounded-2xl xl:px-[30px]">
         <div className="overflow-auto">
-          <table>
-            <thead>
-              {table.getHeaderGroups().map((row) => {
-                return (
-                  <tr className="border-b border-gray-e6" id={row.id}>
-                    {row.headers.map((header) => {
-                      return (
-                        <td className="text-blue-71 text-xs font-medium pb-[7px] pr-4 text-start xl:text-base">
-                          {flexRender(header.id, header.getContext())}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </thead>
+          {isPending ? (
+            <div className="flex gap-2 items-center">
+              <p>Loading Data</p>
+              <LoadingSvg color="text-[#1814f3]" />
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead>
+                {table.getHeaderGroups().map((row) => {
+                  return (
+                    <tr className="border-b border-gray-e6" id={row.id}>
+                      {row.headers.map((header) => {
+                        return (
+                          <td className="capitalize text-blue-71 text-xs font-medium pb-[7px] pr-4 text-start xl:text-base">
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </thead>
 
-            <tbody>
-              {table.getRowModel().rows.map((row) => {
-                console.log(row);
-                return (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      console.log(cell);
+              <tbody>
+                {table.getRowModel().rows.map((row, index) => {
+                  // console.log(row);
+                  return (
+                    <tr
+                      className={`${
+                        index !== dataCategories.length - 1 ? "border-b" : ""
+                      } border-gray-f2`}
+                      key={row.id}
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        console.log(cell);
 
-                      return (
-                        <td>
-                          {flexRender(
-                            cell.row.original.name,
-                            cell.getContext()
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                        return (
+                          <td
+                            className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </BaseSidebarHeader>

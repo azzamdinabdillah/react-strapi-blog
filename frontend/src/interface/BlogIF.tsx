@@ -19,6 +19,7 @@ export interface CategoryIF {
   slug?: string;
   id?: string;
   documentId?: string;
+  createdAt?: string;
 }
 
 export interface BlogImage {

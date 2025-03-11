@@ -64,7 +64,7 @@ export function InputTextGroup({
   readonly,
 }: InputIF) {
   return (
-    <div className="flex flex-col gap-[9px]">
+    <div className="flex flex-col gap-[9px] w-full">
       <Label label={label} />
       <InputText
         readonly={readonly}
