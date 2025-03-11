@@ -25,6 +25,7 @@ interface InputPostIF {
   category: string;
   image: number | { id: number } | null;
   content: any;
+  slug: string;
 }
 
 export default function FormBlog() {
@@ -41,6 +42,7 @@ export default function FormBlog() {
     description: "",
     image: null,
     title: "",
+    slug: "",
   });
 
   if (params.id) {
@@ -67,6 +69,7 @@ export default function FormBlog() {
           description: editData.description,
           image: editData.image,
           title: editData.title,
+          slug: editData.slug,
         });
 
         setEditDataIsLoading(false);
@@ -234,9 +237,19 @@ export default function FormBlog() {
                 setInputs(
                   produce((draft) => {
                     draft.title = e.target.value;
+                    draft.slug = e.target.value
+                      .split(" ")
+                      .join("-")
+                      .toLowerCase();
                   })
                 )
               }
+            />
+            <InputTextGroup
+              readonly={true}
+              placeholder="Slug"
+              label="Slug"
+              value={inputs.slug}
             />
             <InputTextGroup
               placeholder="Azam Din Abdillah"

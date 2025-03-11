@@ -48,10 +48,15 @@ function Homepage() {
             <SkeletonCardBlog />
             <SkeletonCardBlog />
           </>
+        ) : blogs.length < 1 ? (
+          <p>Blog Kosong</p>
         ) : (
           blogs.map((blog, index) => (
             <Fragment key={index}>
-              <Link className="w-full" to={`/blog/${blog.documentId}/${blog.slug}`}>
+              <Link
+                className="w-full"
+                to={`/blog/${blog.documentId}/${blog.slug}`}
+              >
                 <CardBlog
                   author={blog.author}
                   image={{

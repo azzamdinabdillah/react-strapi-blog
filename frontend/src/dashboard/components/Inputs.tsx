@@ -7,16 +7,23 @@ export interface InputIF {
   label?: string;
   onChangeInput?: React.ChangeEventHandler<HTMLInputElement>;
   onChangeTextarea?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  readonly?: boolean;
 }
 
-export function InputText({ placeholder, onChangeInput, value }: InputIF) {
+export function InputText({
+  placeholder,
+  onChangeInput,
+  value,
+  readonly = false,
+}: InputIF) {
   return (
     <input
       placeholder={placeholder}
       type="text"
+      readOnly={readonly}
       value={value || ""}
       onChange={onChangeInput}
-      className="focus-input w-full py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
+      className="focus-input w-full read-only:bg-black-23/3 py-3 px-4 rounded-[10px] border border-gray-df text-blue-71 input-dashboard-typography placeholder:input-dashboard-typography"
     />
   );
 }
@@ -54,11 +61,13 @@ export function InputTextGroup({
   label,
   onChangeInput,
   value,
+  readonly,
 }: InputIF) {
   return (
     <div className="flex flex-col gap-[9px]">
       <Label label={label} />
       <InputText
+        readonly={readonly}
         placeholder={placeholder}
         onChangeInput={onChangeInput}
         value={value || ""}
