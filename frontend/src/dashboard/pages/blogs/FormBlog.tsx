@@ -186,9 +186,9 @@ export default function FormBlog() {
           };
 
           await mutation.mutateAsync(newInputs);
-
-          toast.success("Blog updated successfully");
         }
+
+        toast.success("Blog updated successfully");
       }
     } catch (errors: any) {
       if (imageId) {
