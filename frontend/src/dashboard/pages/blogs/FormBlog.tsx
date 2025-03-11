@@ -11,7 +11,7 @@ import { CategoryIF } from "../../../interface/BlogIF";
 import { httpRequest } from "../../../helpers/http-request";
 import { produce } from "immer";
 import Button from "../../components/Button";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RichText } from "../../components/RichText";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
@@ -30,6 +30,7 @@ interface InputPostIF {
 
 export default function FormBlog() {
   const params = useParams();
+  const queryClient = useQueryClient();
   const [isEditPage, setIsEditPage] = useState<boolean>(false);
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -189,6 +190,7 @@ export default function FormBlog() {
         }
 
         toast.success("Blog updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
       }
     } catch (errors: any) {
       if (imageId) {

@@ -18,6 +18,7 @@ import { authSlice } from "./dashboard/slices/authSlices";
 import FormBlog from "./dashboard/pages/blogs/FormBlog";
 import { ToastContainer, Bounce } from "react-toastify";
 import Register from "./dashboard/pages/auth/Register";
+import Categories from "./dashboard/pages/categories/Categories";
 
 const store = configureStore({
   reducer: {
@@ -75,6 +76,9 @@ createRoot(document.getElementById("root")!).render(
                 <Route index element={<Blogs />} />
                 <Route path="add-blog" element={<FormBlog />} />
                 <Route path="edit-blog/:id/:slug" element={<FormBlog />} />
+              </Route>
+              <Route path="categories">
+                <Route index element={<Categories />} />
               </Route>
             </Route>
           </Routes>
