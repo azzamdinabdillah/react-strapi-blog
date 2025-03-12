@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CardStat from "../../components/CardStat";
 import BaseSidebarHeader from "../../layouts/BaseSidebarHeader";
 import api from "../../../helpers/axios-config";
@@ -13,8 +13,12 @@ import { Link } from "react-router";
 import Button from "../../components/Button";
 import { formatDate } from "../../../helpers/format-date";
 import { LoadingSvg } from "../../components/Loading";
+import { toastError } from "../../../helpers/toast-error";
+import { toast } from "react-toastify";
+import { httpRequest } from "../../../helpers/http-request";
 
 function Categories() {
+  const queryClient = useQueryClient();
   const { data: dataCategories = [], isPending } = useQuery<CategoryIF[]>({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -37,7 +41,44 @@ function Categories() {
         return formatDate(row.original.createdAt ?? "");
       },
     },
+    {
+      accessorKey: "action",
+      header: "Action",
+      cell: ({ row }) => (
+        <div className="flex gap-3">
+          <Button size="xs" buttonType="button">
+            Edit
+          </Button>
+          <Button
+            disabled={deleteMutation.isPending ? true : false}
+            onclick={() => deleteMutation.mutate(row.original.id ?? "")}
+            size="xs"
+            buttonType="button"
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+    },
   ];
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await httpRequest({
+        url: "/categories/" + id,
+        type: "delete",
+      });
+
+      return response;
+    },
+    onError: (errors: any) => {
+      toastError(errors);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success("category deleted successfully");
+    },
+  });
 
   const table = useReactTable({
     data: dataCategories,
@@ -92,7 +133,6 @@ function Categories() {
 
               <tbody>
                 {table.getRowModel().rows.map((row, index) => {
-                  // console.log(row);
                   return (
                     <tr
                       className={`${
@@ -101,8 +141,6 @@ function Categories() {
                       key={row.id}
                     >
                       {row.getVisibleCells().map((cell) => {
-                        console.log(cell);
-
                         return (
                           <td
                             className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}

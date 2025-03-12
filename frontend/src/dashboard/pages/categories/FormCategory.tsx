@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../../../helpers/axios-config";
 import { toast } from "react-toastify";
 import { LoadingButton } from "../../components/Loading";
+import { toastError } from "../../../helpers/toast-error";
 
 export default function FormCategory() {
   const [name, setName] = useState<string>("");
@@ -25,22 +26,7 @@ export default function FormCategory() {
       setName("");
     } catch (errors: any) {
       errors = errors.response.data.error.details.errors;
-      toast.error(
-        Array.isArray(errors) ? (
-          <div className="">
-            Error : <br />
-            <ul className="pl-5">
-              {errors.map((e: any, index: number) => (
-                <li className="list-decimal" key={index}>
-                  {e.message}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          "Error : " + errors
-        )
-      );
+      toastError(errors);
     }
   };
 

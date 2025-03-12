@@ -17,6 +17,7 @@ import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import api from "../../../helpers/axios-config";
 import { LoadingSvg } from "../../components/Loading";
+import { toastError } from "../../../helpers/toast-error";
 
 interface InputPostIF {
   title: string;
@@ -196,22 +197,7 @@ export default function FormBlog() {
       if (imageId) {
         deleteImage.mutate(imageId);
       }
-      toast.error(
-        Array.isArray(errors) ? (
-          <div className="">
-            Error : <br />
-            <ul className="pl-5">
-              {errors.map((e: any, index: number) => (
-                <li className="list-decimal" key={index}>
-                  {e.message}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          "Error : " + errors
-        )
-      );
+      toastError(errors);
     }
   }
 

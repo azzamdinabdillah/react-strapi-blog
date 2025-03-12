@@ -22,6 +22,11 @@ export async function httpRequest({ type, url, body, config }: HttpRequest) {
         return response.data;
         break;
 
+      case "delete":
+        response = await api.delete(url, body);
+        return response.data;
+        break;
+
       default:
         break;
     }
