@@ -81,6 +81,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="categories">
                 <Route index element={<Categories />} />
                 <Route path="add-category" element={<FormCategory />} />
+                <Route path="edit-category/:documentId/:slug" element={<FormCategory />} />
               </Route>
             </Route>
           </Routes>

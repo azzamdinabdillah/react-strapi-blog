@@ -46,9 +46,11 @@ function Categories() {
       header: "Action",
       cell: ({ row }) => (
         <div className="flex gap-3">
-          <Button size="xs" buttonType="button">
-            Edit
-          </Button>
+          <Link to={`/dashboard/categories/edit-category/${row.original.documentId}/${row.original.slug}`}>
+            <Button size="xs" buttonType="button">
+              Edit
+            </Button>
+          </Link>
           <Button
             disabled={deleteMutation.isPending ? true : false}
             onclick={() => deleteMutation.mutate(row.original.id ?? "")}
