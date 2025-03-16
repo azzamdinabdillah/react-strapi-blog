@@ -175,7 +175,7 @@ export default function Blogs() {
               <p>Wait For The Table</p>
               <LoadingSvg color="text-[#1814f3]" />
             </div>
-          ) : (
+          ) : blogPosts.length > 0 ? (
             <table className="w-full overflow-auto">
               <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -191,61 +191,38 @@ export default function Blogs() {
                         )}
                       </th>
                     ))}
-                    {/* <th className="text-blue-71 text-xs font-medium pb-[7px] text-start xl:text-base">
-                      Action
-                    </th> */}
                   </tr>
                 ))}
               </thead>
               <tbody>
-                {table.getRowModel().rows.map((row, index) => (
-                  <tr
-                    key={row.id}
-                    className={`${
-                      index !== blogPosts.length - 1 ? "border-b" : ""
-                    } border-gray-f2`}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <>
-                        <td
-                          key={cell.id}
-                          className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      </>
-                    ))}
-                    {/* <td>
-                      <div className="flex gap-3">
-                        <Link
-                          to={`edit-blog/${row.original.documentId}/${row.original.slug}`}
-                        >
-                          <Button size="xs" buttonType="button">
-                            Edit
-                          </Button>
-                        </Link>
-                        <Button
-                          key={row.original.documentId}
-                          onclick={() => handleDelete(row.original)}
-                          size="xs"
-                          buttonType="button"
-                          disabled={
-                            deleteImage.isPending || deleteBlog.isPending
-                              ? true
-                              : false
-                          }
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </td> */}
-                  </tr>
-                ))}
+                {table.getRowModel().rows.map((row, index) => {
+                  return (
+                    <tr
+                      key={row.id}
+                      className={`${
+                        index !== blogPosts.length - 1 ? "border-b" : ""
+                      } border-gray-f2`}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <>
+                          <td
+                            key={cell.id}
+                            className={`text-black-23 text-xs font-normal py-[15px] md:py-[18px] xl:py-[23px] capitalize whitespace-nowrap pr-6 max-w-[200px] text-ellipsis overflow-hidden xl:text-base`}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        </>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+          ) : (
+            "Blog Is Empty"
           )}
         </div>
       </div>

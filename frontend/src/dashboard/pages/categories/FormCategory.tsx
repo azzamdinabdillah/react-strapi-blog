@@ -43,7 +43,14 @@ export default function FormCategory() {
   const addMutation = useMutation({
     mutationFn: async () =>
       api.post("/categories", {
-        data: { name },
+        data: { name, slug: name.split(" ").join("-").toLowerCase() },
+      }),
+  });
+
+  const editMutation = useMutation({
+    mutationFn: async (id: string) =>
+      api.put(`/categories/${id}`, {
+        data: { name, slug: name.split(" ").join("-").toLowerCase() },
       }),
   });
 
@@ -51,8 +58,13 @@ export default function FormCategory() {
     e.preventDefault();
 
     try {
-      await addMutation.mutateAsync();
-      toast.success("category added successfully");
+      if (idEdit) {
+        await editMutation.mutateAsync(idEdit);
+        toast.success("category updated successfully");
+      } else {
+        await addMutation.mutateAsync();
+        toast.success("category added successfully");
+      }
       setName("");
     } catch (errors: any) {
       errors = errors.response.data.error.details.errors;
