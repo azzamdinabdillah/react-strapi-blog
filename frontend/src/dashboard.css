@@ -19,13 +19,13 @@
   --color-red-d9: #d91b1b;
 }
 
-.active-svg svg path {
+/* .active-svg svg path {
   fill: #2d60ff;
 }
 
 .inactive-svg svg path {
   fill: #b1b1b1;
-}
+} */
 
 .rsw-editor {
   border: 1px solid #dfeaf2 !important;
