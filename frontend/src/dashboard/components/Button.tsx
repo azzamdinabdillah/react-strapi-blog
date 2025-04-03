@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface ButtonComponentIF {
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "md";
   children: ReactNode;
   customClassName?: string;
   buttonType: "submit" | "reset" | "button" | undefined;

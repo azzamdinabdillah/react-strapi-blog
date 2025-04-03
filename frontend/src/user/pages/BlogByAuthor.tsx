@@ -54,6 +54,7 @@ export default function BlogByAuthor() {
                   author={blog.author}
                   image={{
                     url: `${import.meta.env.VITE_BE_URL}${blog.image.url}`,
+                    id: blog.image.id
                   }}
                   category={{
                     name: blog.category.name,
