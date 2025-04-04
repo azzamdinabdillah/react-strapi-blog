@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Navbar, NavbarMobile } from "./Navbar";
 import { useNavigate } from "react-router";
 import { SkeletonHeader } from "./Skeletons";
+import BackIcon from '/icons/back.svg';
 
 interface HeroIF {
   children: ReactNode;
@@ -27,7 +28,7 @@ export function Hero({
       <div className="flex flex-col lg:flex-row items-start gap-3 lg:gap-8 md:max-w-[800px] md:mx-auto lg:max-w-[930px] py-10 md:py-20 lg:py-36 lg:pt-[200px] xl:pt-[250px]">
         {isBack && (
           <img
-            src="/icons/back.svg"
+            src={BackIcon}
             alt=""
             onClick={() => navigate(-1)}
             className="cursor-pointer"

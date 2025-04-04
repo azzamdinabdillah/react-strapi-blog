@@ -1,62 +1,54 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { close } from "../slices/sidebarDrawer";
 import { NavLink } from "react-router";
+import SidebarHomeInactive from '/dashboard/icons/sidebar-home-inactive.svg';
+import SidebarHomeActive from '/dashboard/icons/sidebar-home-active.svg';
+
+import SidebarBlogInactive from '/dashboard/icons/sidebar-blog-inactive.svg';
+import SidebarBlogActive from '/dashboard/icons/sidebar-blog-active.svg';
+
+import SidebarCategoryInactive from '/dashboard/icons/sidebar-category-inactive.svg';
+import SidebarCategoryActive from '/dashboard/icons/sidebar-category-active.svg';
+
+import SidebarLogoutInactive from '/dashboard/icons/sidebar-logout-inactive.svg';
+
 
 const sidebarMenu: {
   title: string;
   redirect: string;
-  svgInactive: ReactNode;
-  svgActive?: ReactNode;
+  svgInactive: React.ReactNode;
+  svgActive?: React.ReactNode;
 }[] = [
   {
     title: "dashboard",
     redirect: "/dashboard",
-    svgInactive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-home-inactive.svg" alt="" />
-    ),
-    svgActive: <img className="w-full" src="/dashboard/icons/sidebar-home-active.svg" alt="" />,
+    svgInactive: <img className="w-full" src={SidebarHomeInactive} alt="" />,
+    svgActive: <img className="w-full" src={SidebarHomeActive} alt="" />,
   },
-
   {
     title: "Blogs",
     redirect: "/dashboard/blogs",
-    svgInactive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-blog-inactive.svg" alt="" />
-    ),
-    svgActive: <img className="w-full" src="/dashboard/icons/sidebar-blog-active.svg" alt="" />,
+    svgInactive: <img className="w-full" src={SidebarBlogInactive} alt="" />,
+    svgActive: <img className="w-full" src={SidebarBlogActive} alt="" />,
   },
   {
     title: "Categories",
     redirect: "/dashboard/categories",
-    svgInactive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-category-inactive.svg" alt="" />
-    ),
-    svgActive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-category-active.svg" alt="" />
-    ),
+    svgInactive: <img className="w-full" src={SidebarCategoryInactive} alt="" />,
+    svgActive: <img className="w-full" src={SidebarCategoryActive} alt="" />,
   },
-
   {
     title: "Home",
     redirect: "/",
-    svgInactive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-logout-inactive.svg" alt="" />
-    ),
-    svgActive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-logout-inactive.svg" alt="" />
-    ),
+    svgInactive: <img className="w-full" src={SidebarLogoutInactive} alt="" />,
+    svgActive: <img className="w-full" src={SidebarLogoutInactive} alt="" />,
   },
-
   {
     title: "Logout",
     redirect: "/login",
-    svgInactive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-logout-inactive.svg" alt="" />
-    ),
-    svgActive: (
-      <img className="w-full" src="/dashboard/icons/sidebar-logout-inactive.svg" alt="" />
-    ),
+    svgInactive: <img className="w-full" src={SidebarLogoutInactive} alt="" />,
+    svgActive: <img className="w-full" src={SidebarLogoutInactive} alt="" />,
   },
 ];
 

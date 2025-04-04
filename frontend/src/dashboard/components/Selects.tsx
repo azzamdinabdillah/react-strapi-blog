@@ -1,5 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import { ChangeEventHandler, ReactNode } from "react";
+import SelectIcon from '/dashboard/icons/select-icon.svg';
 
 export interface SelectIF {
   value: string;
@@ -33,7 +34,7 @@ export function Select({
         ))}
       </select>
       <img
-        src="/dashboard/icons/select-icon.svg"
+        src={SelectIcon}
         alt=""
         className="absolute top-1/2 -translate-y-1/2 right-4"
       />

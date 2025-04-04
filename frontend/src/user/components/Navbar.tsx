@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Button } from "./Button";
 import { Link } from "react-router";
+import BrandIcon from "/public/icons/brand.svg";
+import HamburgerIcon from "/public/icons/hamburger-menu.svg";
+import CloseIcon from "/public/icons/close.svg";
 
 function NavbarMenu() {
   return (
     <>
       <div className="text-white text-[18px] font-medium gap-10 flex items-center">
-        <a href="/dashboard">Dashboard</a>
+        <Link to={"/dashboard"}>Dashboard</Link>
         <a href="">Daily Updates</a>
         <a href="">Tutorials</a>
         <a href="">Library</a>
@@ -20,7 +23,7 @@ export function Navbar() {
   return (
     <div className="hidden lg:flex justify-between items-center lg:py-10 lg:max-w-[925px] xl:py-14 xl:max-w-[1260px] mx-auto absolute top-0 left-0 right-0 xl:px-20">
       <Link to={"/"}>
-        <img src="/public/icons/brand.svg" alt="" />
+        <img src={BrandIcon} alt="" />
       </Link>
       <NavbarMenu />
     </div>
@@ -33,16 +36,12 @@ export function NavbarMobile() {
   return (
     <div className="md:max-w-[800px] md:mx-auto">
       <div className="flex justify-between items-center lg:hidden pt-4 md:pt-10">
-        <img src="/public/icons/brand.svg" alt="" />
+        <img src={BrandIcon} alt="" />
         <div
           className="p-3 bg-white/10 rounded w-13 h-13 cursor-pointer"
           onClick={() => setNavbarDrawerOpen(true)}
         >
-          <img
-            src="/public/icons/hamburger-menu.svg"
-            alt=""
-            className="w-full"
-          />
+          <img src={HamburgerIcon} alt="" className="w-full" />
         </div>
       </div>
 
@@ -65,10 +64,10 @@ export function NavbarMobile() {
               className="p-3 bg-blue-100 rounded w-13 h-13 cursor-pointer"
               onClick={() => setNavbarDrawerOpen(false)}
             >
-              <img src="/public/icons/close.svg" alt="" className="w-full" />
+              <img src={CloseIcon} alt="" className="w-full" />
             </div>
             <div className="text-black text-[20px] font-medium gap-10 flex flex-col items-end">
-              <a href="/dashboard">Dashboard</a>
+              <Link to={"/dashboard"}>Dashboard</Link>
               <a href="">Daily Updates</a>
               <a href="">Tutorials</a>
               <a href="">Library</a>

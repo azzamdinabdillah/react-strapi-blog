@@ -5,6 +5,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../slices/authSlices";
+import LoginBg from '/dashboard/images/login-bg-desktop.png';
+import ErrorIcon from '/dashboard/icons/error-login.svg';
+import EmailIcon from '/dashboard/icons/email-login.svg';
+import LockIcon from '/dashboard/icons/lock-login.svg';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -42,7 +46,7 @@ export default function Login() {
       <div className="xl:grid grid-cols-2 items-center">
         <div className="hidden xl:block xl:h-[100dvh]">
           <img
-            src="/dashboard/images/login-bg-desktop.png"
+            src={LoginBg}
             alt=""
             className="object-cover w-full h-full"
           />
@@ -70,13 +74,13 @@ export default function Login() {
                   {Array.isArray(mutation.error) ? (
                     mutation.error.map((error) => (
                       <div className="flex gap-1">
-                        <img src="/dashboard/icons/error-login.svg" alt="" />
+                        <img src={ErrorIcon} alt="" />
                         {error.message}
                       </div>
                     ))
                   ) : (
                     <>
-                      <img src="/dashboard/icons/error-login.svg" alt="" />
+                      <img src={ErrorIcon} alt="" />
                       {String(mutation.error)}
                     </>
                   )}
@@ -103,7 +107,7 @@ export default function Login() {
                       className="rounded-full w-full before:content-[] h-12 flex justify-center items-center border border-[#D3E0FE] focus:border-[#4045EF] outline-none placeholder:text-sm placeholder:font-normal placeholder:text-[#899CC9] text-[#2E3139] text-sm font-normal px-4 pl-[42px]"
                     />
                     <img
-                      src="/dashboard/icons/email-login.svg"
+                      src={EmailIcon}
                       alt=""
                       className="bg-contain bg-no-repeat bg-center block w-4 h-4 absolute top-1/2 -translate-y-1/2 left-4"
                     />
@@ -132,7 +136,7 @@ export default function Login() {
                       className="rounded-full w-full before:content-[] h-12 flex justify-center items-center border border-[#D3E0FE] focus:border-[#4045EF] outline-none placeholder:text-sm placeholder:font-normal placeholder:text-[#899CC9] text-[#2E3139] text-sm font-normal px-4 pl-[42px]"
                     />
                     <img
-                      src="/dashboard/icons/lock-login.svg"
+                      src={LockIcon}
                       alt=""
                       className="bg-contain bg-no-repeat bg-center block w-4 h-4 absolute top-1/2 -translate-y-1/2 left-4"
                     />
