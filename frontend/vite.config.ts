@@ -3,31 +3,32 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    {
-      name: "transform-img-src",
-      transform(code, id) {
-        // Target hanya file JSX / TSX (React)
-        if (!id.endsWith(".jsx") && !id.endsWith(".tsx")) return null;
+// export default defineConfig({
+//   plugins: [react(), tailwindcss()],
+//   // base: "/react-strapi-blog/",
+//   server: {
+//     allowedHosts: ["blog.azamportfolio.my.id"],
+//     cors: {
+//       origin: ["https://blog.azamportfolio.my.id"],
+//       methods: ["GET", "POST", "PUT", "DELETE"],
+//       allowedHeaders: ["Content-Type", "Authorization"],
+//       credentials: true
+//     },
+//   },
+// });
 
-        // Cari tag <img> yang punya src="/..."
-        const updatedCode = code.replace(
-          /<img([^>]*?)src="\/([^"]+)"([^>]*?)\/?>/g,
-          (before, path, after) => {
-            // Tambahkan prefix react-strapi-blog/
-            return `<img${before}src="react-strapi-blog/${path}"${after}>`;
-          }
-        );
+import { mergeConfig } from "vite";
 
-        return {
-          code: updatedCode,
-          map: null,
-        };
+export default (config) => {
+  // Important: always return the modified config
+  return mergeConfig(config, {
+    plugins: [react(), tailwindcss()],
+    server: {
+      allowedHosts: ["blog.azamportfolio.my.id"],
+      cors: {
+        origin: ["*", "your white list origin"],
+        credentials: true,
       },
     },
-  ],
-  base: "/react-strapi-blog/",
-});
+  });
+};

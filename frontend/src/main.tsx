@@ -56,7 +56,7 @@ createRoot(document.getElementById("root")!).render(
     />
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <BrowserRouter basename="/react-strapi-blog/">
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/blog">
