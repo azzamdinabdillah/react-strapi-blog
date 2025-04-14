@@ -4,12 +4,11 @@ export default ({ env }) => ({
   app: {
     keys: env.array("APP_KEYS"),
   },
-  url: 'https://blog-api.azamportfolio.my.id',
-  // cors: {
-  //   enabled: true,
-  //   origin: ["*"],
-  //   methods: ["GET", "POST", "PUT", "DELETE"], // Allow required methods
-  //   headers: ["Content-Type", "Authorization"], // Include required headers
-  //   credentials: true,
-  // },
+  cors: {
+    enabled: true,
+    origin: ["http://localhost:5174"],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow required methods
+    headers: ["Content-Type", "Authorization"], // Include required headers
+    credentials: true,
+  },
 });

@@ -76,7 +76,7 @@ export default function FormBlog() {
 
         setEditDataIsLoading(false);
         setIsEditPage(true);
-        setPreviewImage(import.meta.env.VITE_BE_URL + editData.image.url);
+        setPreviewImage(editData.image.url);
       }
     }, [editData, categories]);
   } else {

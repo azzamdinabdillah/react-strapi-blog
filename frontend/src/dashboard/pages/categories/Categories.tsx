@@ -119,7 +119,7 @@ function Categories() {
               <p>Loading Data</p>
               <LoadingSvg color="text-[#1814f3]" />
             </div>
-          ) : (
+          ) : dataCategories?.length > 0 ? (
             <table className="w-full">
               <thead>
                 {table.getHeaderGroups().map((row) => {
@@ -166,6 +166,8 @@ function Categories() {
                 })}
               </tbody>
             </table>
+          ) : (
+            "Category Is Empty"
           )}
         </div>
       </div>

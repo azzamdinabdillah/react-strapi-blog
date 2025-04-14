@@ -48,7 +48,7 @@ export default function Blogs() {
           <div className="w-full">
             <img
               className="w-32 h-7 xl:w-20 xl:h-20 object-cover rounded"
-              src={import.meta.env.VITE_BE_URL + row.original.image.url}
+              src={row.original.image.url}
               alt=""
             />
           </div>

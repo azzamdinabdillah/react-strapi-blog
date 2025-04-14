@@ -49,13 +49,17 @@ export default function SingleBlog() {
         ) : (
           <div className="">
             <img
-              src={`${import.meta.env.VITE_BE_URL}${blog?.image.url}`}
+              src={`${blog?.image.url}`}
               alt=""
               className="h-70 w-full object-cover rounded-[10px] rounded-t-none md:h-[400px] lg:h-[500px] xl:h-[700px]"
             />
 
             <div className="md:max-w-[850px] lg:max-w-[970px] w-full rich-text px-3 py-5 mx-auto md:py-10 lg:py-16 xl:py-28">
-              <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(String(blog?.content || ""))}} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(String(blog?.content || "")),
+                }}
+              />
             </div>
           </div>
         )}

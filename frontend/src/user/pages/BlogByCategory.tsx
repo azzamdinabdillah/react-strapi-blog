@@ -53,7 +53,7 @@ export default function BlogByCategory() {
                 <CardBlog
                   author={blog.author}
                   image={{
-                    url: `${import.meta.env.VITE_BE_URL}${blog.image.url}`,
+                    url: `${blog.image.url}`,
                     id: blog.image.id
                   }}
                   category={{
