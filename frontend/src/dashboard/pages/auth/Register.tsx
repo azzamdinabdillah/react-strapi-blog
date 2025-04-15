@@ -65,7 +65,7 @@ export default function Register() {
           />
         </div>
         <div className="top bg-[url(/dashboard/images/login-bg.png)] bg-center bg-no-repeat bg-cover h-[240px] relative xl:bg-none xl:h-fit">
-          <div className="bg-white rounded-3xl py-8 px-5 w-[90%] mx-auto gap-8 flex flex-col absolute -bottom-[247%] left-1/2 -translate-x-1/2 md:max-w-[700px] xl:static xl:translate-0 xl:max-w-[400px] xl:p-0 xl:gap-12">
+          <div className="bg-white rounded-3xl py-8 px-5 w-[90%] mx-auto gap-8 flex flex-col absolute -bottom-[200%] left-1/2 -translate-x-1/2 md:max-w-[700px] xl:static xl:translate-0 xl:max-w-[400px] xl:p-0 xl:gap-12">
             <div className="title gap-2 flex flex-col">
               <h1 className="text-2xl text-[#2E3139] font-bold xl:text-[32px]">
                 Welcome
