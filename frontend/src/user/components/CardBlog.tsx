@@ -57,7 +57,7 @@ function CardBlog({
           </Link>
         </span>
       </div>
-      <div className="image w-full h-[200px] sm:order-2 md:max-w-[300px] lg:w-full lg:h-[210px] md:justify-self-center">
+      <div className="image w-full h-[200px] sm:order-2 md:max-w-[300px] lg:w-full lg:h-[210px] md:justify-self-end">
         <img
           src={image.url}
           alt=""
