@@ -168,7 +168,7 @@ export default function Blogs() {
         </Link>
       </div>
 
-      <div className="py-[17px] md:py-[22px] pb-[2px] px-5 bg-white rounded-2xl xl:px-[30px]">
+      <div className="py-[17px] md:py-[22px] px-5 bg-white rounded-2xl xl:px-[30px]">
         <div className="overflow-auto">
           {isPending ? (
             <div className="flex gap-2 items-center">
